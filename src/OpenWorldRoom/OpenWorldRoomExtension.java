@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package OpenWorldRoom;
 
 import Game.DataClasses.BulletClass;
@@ -19,28 +14,17 @@ import Game.Process.TowerAtackerTask;
 import Game.Process.TowerMonsterResurectorTask;
 import Game.Process.TowersManagement;
 import OpenWorldZone.ConfigDataClass;
-import com.github.davidmoten.rtree.RTree;
-import com.github.davidmoten.rtree.geometry.Geometry;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.core.SFSEventType;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 import com.smartfoxserver.v2.mmo.MMORoom;
-import com.smartfoxserver.v2.util.JSONUtil;
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.io.FileUtils;
 
-/**
- *
- * @author Philipp
- */
 public class OpenWorldRoomExtension extends SFSExtension
 {
     private ScheduledFuture<?> monsterControllerTask;
@@ -93,9 +77,6 @@ public class OpenWorldRoomExtension extends SFSExtension
         GlobalGameData.sfs = SmartFoxServer.getInstance();
         GlobalGameData.api = getApi();
         GlobalGameData.mmoApi = GlobalGameData.sfs.getAPIManager().getMMOApi();
-        
-        //GlobalGameData.serverConfig = (ConfigDataClass) getParentZone().getExtension().handleInternalMessage("GetConfig", 1);
-        //trace(GlobalGameData.serverConfig.GetMonsterSpeed() + " ");
     }
     
     @Override
