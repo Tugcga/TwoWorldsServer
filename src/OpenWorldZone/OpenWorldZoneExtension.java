@@ -17,15 +17,8 @@ public class OpenWorldZoneExtension extends SFSExtension
     @Override
     public void init() 
     {
-        try 
-        {
-            serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
-            isServerInit = true;
-        } 
-        catch (IOException ex) 
-        {
-            Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        InitServerConfig();
+        
         userModelIndexes = new ConcurrentHashMap<>();
         addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
         addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
@@ -73,19 +66,24 @@ public class OpenWorldZoneExtension extends SFSExtension
         return null;
     }
     
+    void InitServerConfig()
+    {
+        try 
+        {
+            serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
+            isServerInit = true;
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public ConfigDataClass GetServerConfig()
     {
         if(!isServerInit)
         {
-            try 
-            {
-                serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
-                isServerInit = true;
-            } 
-            catch (IOException ex) 
-            {
-                Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            InitServerConfig();
         }
         return serverConfig;
     }
