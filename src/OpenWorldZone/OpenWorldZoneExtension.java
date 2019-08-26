@@ -1,28 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package OpenWorldZone;
 
 import com.smartfoxserver.v2.core.SFSEventType;
-import com.smartfoxserver.v2.entities.data.ISFSArray;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.extensions.SFSExtension;
-import com.smartfoxserver.v2.util.JSONUtil;
-import java.io.File;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Philipp
- */
 public class OpenWorldZoneExtension extends SFSExtension
 {
     Map<Integer, Integer> userModelIndexes;
@@ -41,7 +26,7 @@ public class OpenWorldZoneExtension extends SFSExtension
         {
             Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
-        userModelIndexes = new ConcurrentHashMap<Integer, Integer>();
+        userModelIndexes = new ConcurrentHashMap<>();
         addEventHandler(SFSEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
         addEventHandler(SFSEventType.USER_LOGIN, LoginEventHandler.class);
         addRequestHandler("RPCClientSelectCharacter", Handler_RPCClientSelectCharacter.class);
