@@ -1,6 +1,8 @@
 package OpenWorldZone;
 
 import com.smartfoxserver.v2.controllers.SystemRequest;
+import com.smartfoxserver.v2.controllers.filter.ISystemFilterChain;
+import com.smartfoxserver.v2.controllers.filter.SysControllerFilterChain;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.entities.Room;
@@ -15,8 +17,8 @@ import java.util.logging.Logger;
 
 public class OpenWorldZoneExtension extends SFSExtension
 {
-    Map<Integer, Integer> userModelIndexes;
-    ConfigDataClass serverConfig = null;
+    Map<Integer, Integer> userModelIndexes;  // this map used in RoomExtension for creating player, key - sessionId, but not UserId
+    //ConfigDataClass serverConfig = null;
     List<Room> roomList;
     SFSArray roomNames;
     boolean isServerInit;
@@ -26,21 +28,49 @@ public class OpenWorldZoneExtension extends SFSExtension
     @Override
     public void init() 
     {
-        trace("Init Zone " + getParentZone().getName());
-        if(!isServerInit)
-        {
-            InitServerConfig();
-        }
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
         addEventHandler(SFSEventType.SERVER_READY, Handler_ServerReady.class);
         addEventHandler(SFSEventType.USER_DISCONNECT, Handler_UserDisconnect.class);  // this event should be fired on the room extension
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
         addEventHandler(SFSEventType.USER_LOGOUT, Handler_UserLogout.class);
-        addEventHandler(SFSEventType.USER_RECONNECTION_SUCCESS, Handler_UserReconnectionSuccess.class);
-        addEventHandler(SFSEventType.USER_RECONNECTION_TRY, Handler_UserReconnectionTry.class);
         addEventHandler(SFSEventType.USER_LOGIN, Handler_LoginEvent.class);
-        addRequestHandler("RPCClientSelectCharacter", Handler_RPCClientSelectCharacter.class);
+        addEventHandler(SFSEventType.USER_JOIN_ROOM, Handler_UserJoinRoom.class);
+        
+        getParentZone().resetSystemFilterChain();
+         
+        ISystemFilterChain blockingChain = new SysControllerFilterChain();
+        blockingChain.addFilter("block_request", new Filter_BlockRequest());
+         
+        // Plug the filter chain
+        getParentZone().setFilterChain(SystemRequest.JoinRoom, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.CreateRoom, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.ObjectMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.SetRoomVariables, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.SetUserVariables, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.LeaveRoom, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.SubscribeRoomGroup, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.UnsubscribeRoomGroup, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.PublicMessage, blockingChain);  // for messages other filters should be created
+        getParentZone().setFilterChain(SystemRequest.PrivateMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.ModeratorMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.AdminMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.KickUser, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.BanUser, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.SetUserPosition, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.AddBuddy, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.BlockBuddy, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.RemoveBuddy, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.SetBuddyVariables, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.BuddyMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.InviteUser, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.InvitationReply, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.QuickJoinGame, blockingChain);
+        
+        //additional system 
+        //Handshake, Login, Logout, GetRoomList, AutoJoin, GenericMessage, ChangeRoomName, ChangeRoomPassword,
+        //CallExtension, SpectatorToPlayer, PlayerToSpectator, ChangeRoomCapacity,  ManualDisconnection, FindRooms,
+        //FindUsers, PingPong, InitBuddyList, GoOnline, CreateSFSGame, GetLobbyNode, KeepAlive, QuickJoin, OnEnterRoom, OnRoomCountChange, OnUserLost, OnRoomLost, OnUserExitRoom, OnClientDisconnection, OnReconnectionFailure, OnMMOItemVariablesUpdate, OnJoinAppNode
     }
     
     @Override
@@ -64,12 +94,12 @@ public class OpenWorldZoneExtension extends SFSExtension
                 return null;
             }
         }
-        else if(cmdName.equals("GetServerConfig"))
+        /*else if(cmdName.equals("GetServerConfig"))
         {
             return GetServerConfig();
-        }
+        }*/
         else if(cmdName.equals("RemoveUserData"))
-        {//user disconnected, remove data bout it model
+        {//user disconnected, remove data about it model
             RemoveUserData((int)params);
         }
         return null;
@@ -77,16 +107,23 @@ public class OpenWorldZoneExtension extends SFSExtension
     
     // Custom methods
     //------------------------------------------------------
-    public void AddUserModelIndex(int userId, int modelIndex)
+    public void AddUserModelIndex(int sessionId, int modelIndex)
     {//used from Handler_RPCClientSelectCharacter, when client select the model
-        userModelIndexes.put(userId, modelIndex);
+        trace("Save sessionId=" + sessionId + " and model=" + modelIndex);
+        if(userModelIndexes.containsKey(sessionId))
+        {
+            trace("SessionId=" + sessionId + " store in userData yet, rwrite it");
+        }
+        userModelIndexes.put(sessionId, modelIndex);
     }
     
-    public void RemoveUserData(int userId)
+    public void RemoveUserData(int sessionId)
     {//used from here
-        if(userModelIndexes.containsKey(userId))
+        //int sessionId = getApi().getUserById(userId).getSession().getId();
+        trace("Try to remove sessionId=" + sessionId);
+        if(userModelIndexes.containsKey(sessionId))
         {
-            userModelIndexes.remove(userId);
+            userModelIndexes.remove(sessionId);
         }
     }
     
@@ -100,7 +137,16 @@ public class OpenWorldZoneExtension extends SFSExtension
         }
     }
     
-    SFSArray GetRoomNames()
+    public List<Room> GetRooms()
+    {
+        if(roomList == null)
+        {
+            InitRoomNames();
+        }
+        return roomList;
+    }
+    
+    public SFSArray GetRoomNames()
     {
         if(roomList == null)
         {
@@ -109,7 +155,7 @@ public class OpenWorldZoneExtension extends SFSExtension
         return roomNames;
     }
     
-    void InitServerConfig()
+    /*void InitServerConfig()
     {//call at startup or when any would like to get this data
         try 
         {
@@ -121,14 +167,14 @@ public class OpenWorldZoneExtension extends SFSExtension
             isServerInit = false;
             Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
     
-    public ConfigDataClass GetServerConfig()
+    /*public ConfigDataClass GetServerConfig()
     {//called at LoginEventHandler when client connect and ask models
         if(!isServerInit)
         {
             InitServerConfig();
         }
         return serverConfig;
-    }
+    }*/
 }

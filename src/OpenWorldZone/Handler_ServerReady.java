@@ -17,7 +17,7 @@ public class Handler_ServerReady extends BaseServerEventHandler
 {
     @Override
     public void handleServerEvent(ISFSEvent event) throws SFSException 
-    {
-        
+    {//no parameters
+        trace("Zone event: Server ready");
     }
 }

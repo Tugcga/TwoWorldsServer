@@ -2,7 +2,7 @@
 package Game.DataClasses;
 
 import OpenWorldRoom.OpenWorldRoomExtension;
-import OpenWorldZone.ConfigDataClass;
+import OpenWorldRoom.ConfigDataClass;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.api.ISFSApi;
 import com.smartfoxserver.v2.api.ISFSMMOApi;

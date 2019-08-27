@@ -13,7 +13,6 @@ import Game.Process.PlayerMovementControllerTask;
 import Game.Process.TowerAtackerTask;
 import Game.Process.TowerMonsterResurectorTask;
 import Game.Process.TowersManagement;
-import OpenWorldZone.ConfigDataClass;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.extensions.SFSExtension;

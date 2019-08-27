@@ -1,4 +1,4 @@
-package OpenWorldZone;
+package OpenWorldRoom;
 
 import Game.DataClasses.BulletParametersClass;
 import Game.DataClasses.MonsterParametersClass;
