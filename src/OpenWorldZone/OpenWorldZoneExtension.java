@@ -31,7 +31,7 @@ public class OpenWorldZoneExtension extends SFSExtension
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
         addEventHandler(SFSEventType.SERVER_READY, Handler_ServerReady.class);
-        addEventHandler(SFSEventType.USER_DISCONNECT, Handler_UserDisconnect.class);  // this event should be fired on the room extension
+        //addEventHandler(SFSEventType.USER_DISCONNECT, Handler_UserDisconnect.class);  // this event should be fired on the room extension
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
         addEventHandler(SFSEventType.USER_LOGOUT, Handler_UserLogout.class);
         addEventHandler(SFSEventType.USER_LOGIN, Handler_LoginEvent.class);
@@ -84,10 +84,10 @@ public class OpenWorldZoneExtension extends SFSExtension
     {
         if(cmdName.equals("GetUserModelIndex"))
         {//what model used by the user
-            int userId = (int)params;
-            if(userModelIndexes.containsKey(userId))
+            int sessionId = (int)params;
+            if(userModelIndexes.containsKey(sessionId))
             {
-                return userModelIndexes.get(userId);
+                return userModelIndexes.get(sessionId);
             }
             else
             {

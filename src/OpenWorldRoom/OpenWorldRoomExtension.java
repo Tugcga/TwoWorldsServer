@@ -59,6 +59,7 @@ public class OpenWorldRoomExtension extends SFSExtension
             killsNotificator = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new KillsNotificatorTask(), GlobalGameData.serverConfig.GetKillsNotificatorTime(), GlobalGameData.serverConfig.GetKillsNotificatorTime(), TimeUnit.MILLISECONDS);
             towerMonsterResurectorTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerMonsterResurectorTask(), 0, GlobalGameData.serverConfig.GetTowerResurectMonsterTime(), TimeUnit.MILLISECONDS);
             towerAtackerTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerAtackerTask(), 0, GlobalGameData.serverConfig.GetTowerAtackTickTime(), TimeUnit.MILLISECONDS);
+        
         }
         catch (IOException ex) 
         {

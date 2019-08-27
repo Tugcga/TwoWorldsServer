@@ -20,7 +20,8 @@ public class ClientsManagement
 {
     public static void ClientJoinToTheGame(User user)
     {
-        int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getId());
+        //int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getId());
+        int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getSession().getId());
         PlayerModelParametersClass playerParams = GlobalGameData.serverConfig.GetPlayerModelParameters(userModelIndex);
         PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
                 userModelIndex, 
@@ -36,7 +37,8 @@ public class ClientsManagement
     public static void ClientLeaveTheGame(User user)
     {
         int userId = user.getId();
-        GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("RemoveUserData", userId);
+        int sessionId = user.getSession().getId();
+        GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("RemoveUserData", sessionId);
         RemovePlayer(userId);
     }
     
