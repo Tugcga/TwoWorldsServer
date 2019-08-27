@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package OpenWorldZone;
 
 import Game.DataClasses.BulletParametersClass;
@@ -19,6 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.commons.io.FileUtils;
 
+//Store configuration data of the server. All numeric values
 public class ConfigDataClass 
 {
     Map<Integer, PlayerModelParametersClass> playerModels;
@@ -66,10 +62,10 @@ public class ConfigDataClass
         SetTowerParameters(configObject.getSFSArray("towers"));
     }
     
-    void SetPlayerData(ISFSArray playerData)
+    private void SetPlayerData(ISFSArray playerData)
     {
         playersDataSource = playerData;
-        playerModels = new ConcurrentHashMap<Integer, PlayerModelParametersClass>();
+        playerModels = new ConcurrentHashMap<>();
         for(int i = 0; i < playerData.size(); i++)
         {
             ISFSObject pData = playerData.getSFSObject(i);
@@ -78,9 +74,9 @@ public class ConfigDataClass
         }
     }
     
-    void SetMonsterData(ISFSArray monsterData)
+    private void SetMonsterData(ISFSArray monsterData)
     {
-        monsterParameters = new ConcurrentHashMap<Integer, MonsterParametersClass>();
+        monsterParameters = new ConcurrentHashMap<>();
         for(int i = 0; i < monsterData.size(); i++)
         {
             ISFSObject mData = monsterData.getSFSObject(i);
@@ -89,7 +85,7 @@ public class ConfigDataClass
         }
     }
     
-    void SetServerParameters(ISFSObject serverParams)
+    private void SetServerParameters(ISFSObject serverParams)
     {
         playerDeadBlockTime = serverParams.getInt("playerDeadBlockTime");
         monsterMoveRadius = serverParams.getFloat("monsterMoveRadius");
@@ -104,10 +100,10 @@ public class ConfigDataClass
         towerAtackTickTime = serverParams.getInt("towerAtackTickTime");
     }
     
-    void SetBulletsParams(ISFSArray bulletsParams)
+    private void SetBulletsParams(ISFSArray bulletsParams)
     {
         bulletsDataSource = bulletsParams;
-        bulletsParameters = new ConcurrentHashMap<Integer, BulletParametersClass>();
+        bulletsParameters = new ConcurrentHashMap<>();
         for(int i = 0; i < bulletsParams.size(); i++)
         {
             ISFSObject bullet = bulletsParams.getSFSObject(i);
@@ -116,10 +112,10 @@ public class ConfigDataClass
         }
     }
     
-    void SetTowerParameters(ISFSArray towerParams)
+    private void SetTowerParameters(ISFSArray towerParams)
     {
         towerDataSource = towerParams;
-        towerParameters = new ConcurrentHashMap<Integer, TowerParametersClass>();
+        towerParameters = new ConcurrentHashMap<>();
         for(int i = 0; i < towerParams.size(); i++)
         {
             ISFSObject tower = towerParams.getSFSObject(i);

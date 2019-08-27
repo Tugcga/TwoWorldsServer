@@ -38,6 +38,8 @@ public class OpenWorldRoomExtension extends SFSExtension
     {
         try 
         {
+            trace("Init room " + getParentRoom().getName());
+            //Inside room extension server config data used more frequently and this extension init earlie than zone extension
             GlobalGameData.serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
             GlobalGameData.startPoints = new StartPointsClass(this.getCurrentFolder() + "PlayerStartPoints.txt");
             InitGameData();

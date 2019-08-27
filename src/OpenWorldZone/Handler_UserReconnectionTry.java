@@ -11,14 +11,13 @@ import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 
 /**
  *
- * @author Philipp
+ * @author Shekn
  */
-public class JoinZoneEventHandler extends BaseServerEventHandler
+public class Handler_UserReconnectionTry extends BaseServerEventHandler
 {
     @Override
-    public void handleServerEvent(ISFSEvent isfse) throws SFSException 
+    public void handleServerEvent(ISFSEvent event) throws SFSException 
     {
-        //trace("User join to the zone");
+        
     }
-    
 }
