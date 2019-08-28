@@ -3,19 +3,13 @@ package OpenWorldZone;
 import com.smartfoxserver.bitswarm.sessions.Session;
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.core.SFSEventParam;
-import com.smartfoxserver.v2.entities.Room;
-import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.Zone;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.exceptions.SFSErrorCode;
 import com.smartfoxserver.v2.exceptions.SFSErrorData;
 import com.smartfoxserver.v2.exceptions.SFSException;
 import com.smartfoxserver.v2.exceptions.SFSLoginException;
 import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
-import java.util.AbstractList;
-import java.util.List;
 
 public class Handler_LoginEvent extends BaseServerEventHandler
 {
@@ -25,7 +19,7 @@ public class Handler_LoginEvent extends BaseServerEventHandler
         //read input parameters
         String userName = (String) event.getParameter(SFSEventParam.LOGIN_NAME);
         String cryptedPass = (String) event.getParameter(SFSEventParam.LOGIN_PASSWORD);
-        Zone zone = (Zone)event.getParameter(SFSEventParam.ZONE);
+        //Zone zone = (Zone)event.getParameter(SFSEventParam.ZONE);
         Session session = (Session)event.getParameter(SFSEventParam.SESSION);
         SFSObject inData = (SFSObject) event.getParameter(SFSEventParam.LOGIN_IN_DATA);  // get data of the login
         
@@ -61,37 +55,6 @@ public class Handler_LoginEvent extends BaseServerEventHandler
                 SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_INACTIVE_ZONE);
                 throw new SFSLoginException("Zone does not contains any room, skip login process: ", errData);
             }
-            
-            
-            
-            /*List<Room> zoneRooms = this.getParentExtension().getParentZone().getRoomList();
-            User user = getApi().getUserBySession(session);
-            trace("User: " + user);
-            if(zoneRooms.size() > 0 && inData.containsKey("model_index"))
-            {
-                //connect to the first room
-                ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getInt("model_index"));
-                //this.getApi().joi joinRoom( session.get sender, zoneRooms.get(0));
-            }
-            else
-            {//skip connection process
-                SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_INACTIVE_ZONE);
-                throw new SFSLoginException("Server zone has no rooms: ", errData);
-            }*/
-            
-            /*ConfigDataClass serverConfig = ((OpenWorldZoneExtension)this.getParentExtension()).GetServerConfig();
-            if(serverConfig != null)
-            {
-                ISFSObject outData = (ISFSObject) event.getParameter(SFSEventParam.LOGIN_OUT_DATA);  // successfully connect and return client data
-                outData.putSFSArray("models", serverConfig.GetPlayersDataSource());
-                outData.putSFSArray("bullets", serverConfig.GetBulletsDataSource());
-                outData.putSFSArray("rooms", ((OpenWorldZoneExtension)this.getParentExtension()).GetRoomNames());
-            }
-            else
-            {
-                SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_INACTIVE_ZONE);  // return client message abount droped zone
-                throw new SFSLoginException("Server zone inactive, it has empty configuration", errData);
-            }*/
         }
     }
 }
