@@ -6,6 +6,7 @@ import com.smartfoxserver.v2.controllers.filter.SysControllerFilterChain;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.entities.Room;
+import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 import java.io.IOException;
@@ -90,17 +91,18 @@ public class OpenWorldZoneExtension extends SFSExtension
                 return userModelIndexes.get(sessionId);
             }
             else
-            {
-                return null;
+            {//return -1 if the data is invalid
+                return -1;
             }
         }
-        /*else if(cmdName.equals("GetServerConfig"))
-        {
-            return GetServerConfig();
-        }*/
         else if(cmdName.equals("RemoveUserData"))
         {//user disconnected, remove data about it model
             RemoveUserData((int)params);
+        }
+        else if(cmdName.equals("DisconnectUser"))
+        {
+            User user = (User)params;
+            getApi().disconnectUser(user);
         }
         return null;
     }

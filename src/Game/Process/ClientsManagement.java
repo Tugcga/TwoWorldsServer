@@ -22,16 +22,22 @@ public class ClientsManagement
     {
         //int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getId());
         int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getSession().getId());
-        PlayerModelParametersClass playerParams = GlobalGameData.serverConfig.GetPlayerModelParameters(userModelIndex);
-        PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
-                userModelIndex, 
-                playerParams.GetCoolDawn(), playerParams.GetPlayerRadius(), playerParams.GetPlayerLife());
-        //newPlayer.GetLocation().SetRandomLocation(GlobalGameData.serverConfig.GetPlayerEmitRandomRadius());
-        newPlayer.GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
-        GlobalGameData.clients.put(newPlayer.GetId(), newPlayer);
-        
-        NetworkDataProcess.SetPlayerState(newPlayer, true, true);
-        
+        if(userModelIndex != -1)  // -1 - invalid value
+        {
+            PlayerModelParametersClass playerParams = GlobalGameData.serverConfig.GetPlayerModelParameters(userModelIndex);
+            PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
+                    userModelIndex, 
+                    playerParams.GetCoolDawn(), playerParams.GetPlayerRadius(), playerParams.GetPlayerLife());
+            //newPlayer.GetLocation().SetRandomLocation(GlobalGameData.serverConfig.GetPlayerEmitRandomRadius());
+            newPlayer.GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
+            GlobalGameData.clients.put(newPlayer.GetId(), newPlayer);
+
+            NetworkDataProcess.SetPlayerState(newPlayer, true, true);
+        }
+        else
+        {//user does not registered with some model_index, disconnect him
+            GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("DisconnectUser", user);
+        }
     }
     
     public static void ClientLeaveTheGame(User user)
