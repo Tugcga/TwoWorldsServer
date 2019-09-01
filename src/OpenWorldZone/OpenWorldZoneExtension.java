@@ -30,6 +30,7 @@ public class OpenWorldZoneExtension extends SFSExtension
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
         addEventHandler(SFSEventType.USER_LOGOUT, Handler_UserLogout.class);
         addEventHandler(SFSEventType.USER_LOGIN, Handler_LoginEvent.class);
+        //lagSimulationMillis = 2000;
         
         getParentZone().resetSystemFilterChain();
          

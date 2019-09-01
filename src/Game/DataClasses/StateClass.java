@@ -15,7 +15,7 @@ public class StateClass
     long lastSwitchTime;//считается в милисекундах
     int currentState;//0 - do nothing, 1 - walk to the point, 2 -- follow to enemy
     LocationClass toWalkLocation;//store the point in the state = 1
-    IntIntClass toEnemyData;//type, id для цели, за которой следует, когда state=2
+    IntIntClass toEnemyData;//type, id для цели, за которой следует, когда state=2 (type=0 - player, 1 - monster)
     long lastWalkTickTime;
     double locationDelta = 0.1f;
     boolean isStateble;

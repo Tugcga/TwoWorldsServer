@@ -44,7 +44,7 @@ public class OpenWorldRoomExtension extends SFSExtension
             InitGameData();
             GlobalGameData.collisionMap = new CollisionDataClass(this.getCurrentFolder() + "CollisionMap.txt");
             TowersManagement.CreateTowers(this.getCurrentFolder() + "Towers.txt");
-            //lagSimulationMillis = 1000;
+            //lagSimulationMillis = 2000;
 
             // Register handler for user join/leave room events
             addEventHandler(SFSEventType.USER_JOIN_ROOM, UserJoinRoomEventHandler.class);
