@@ -13,6 +13,7 @@ public class StateClass
     PersonClass person;//here we can read current location and change it
     
     long lastSwitchTime;//считается в милисекундах
+    long emitTime; // time of the appereance
     int currentState;//0 - do nothing, 1 - walk to the point, 2 -- follow to enemy
     LocationClass toWalkLocation;//store the point in the state = 1
     IntIntClass toEnemyData;//type, id для цели, за которой следует, когда state=2 (type=0 - player, 1 - monster)
@@ -36,6 +37,7 @@ public class StateClass
         person = parent;
         switchTime = 1 * (sTime + 1) * 1000;
         lastSwitchTime = System.currentTimeMillis();
+        emitTime = System.currentTimeMillis();
         toWalkLocation = new LocationClass();
         toEnemyData = new IntIntClass(-1, -1);
     }
@@ -49,7 +51,7 @@ public class StateClass
     //эта функция вызывается во время задачи обновления состояний монстра. 50 раз в секунду
     public void TaskTick()
     {
-        if(isStateble)
+        if(isStateble)//bullet is not stateble
         {
             if(!person.GetIsDead())
             {
@@ -367,6 +369,11 @@ public class StateClass
     public int GetTargetEnemyId()
     {
         return toEnemyData.GetValue02();
+    }
+    
+    public long GetEmitTime()
+    {
+        return emitTime;
     }
     
     public boolean IsStateNew()

@@ -48,24 +48,28 @@ public class MonsterControllerTask implements Runnable
                 }
                 else
                 {
-                    bullet.GetState().TaskTick();// просто передвигаем снаряд
-                    if(!bullet.GetState().GetShouldDestroy())
-                    {//до цели не долетели
-                        bullet.CheckCollisions();// проверяем, не столкнулись ли с кем
-                    }
-                    if(bullet.GetState().GetShouldDestroy())//shouldDestoy поднимается, когда снаряд долетел до конечной точки. То есть кончился срок жизни или же с кем-то встретился
+                    if(bullet.IsDelayOver())
                     {
-                        if(bullet.IsEffectedOnlyEnd())// это rocket bullet, долетел до цели
-                        {
-                            bullet.CalculateDamage();
+                        bullet.GetState().TaskTick();// просто передвигаем снаряд
+                        if(!bullet.GetState().GetShouldDestroy())
+                        {//до цели не долетели
+                            bullet.CheckCollisions();// проверяем, не столкнулись ли с кем
                         }
-                        MonstersManagement.DestoyBullet(bullet.GetId());
-                        it.remove();
+                        if(bullet.GetState().GetShouldDestroy())//shouldDestoy поднимается, когда снаряд долетел до конечной точки. То есть кончился срок жизни или же с кем-то встретился
+                        {
+                            if(bullet.IsEffectedOnlyEnd())// это rocket bullet, долетел до цели
+                            {
+                                bullet.CalculateDamage();
+                            }
+                            MonstersManagement.DestoyBullet(bullet.GetId());
+                            it.remove();
+                        }
+                        else
+                        {
+                            NetworkDataProcess.SetBulletState(bullet, bullet.GetState().IsStateNew(), false);
+                        }
                     }
-                    else
-                    {
-                        NetworkDataProcess.SetBulletState(bullet, bullet.GetState().IsStateNew(), false);
-                    }
+                    
                 }
                 
             }

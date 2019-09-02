@@ -19,6 +19,8 @@ public class BulletClass extends PersonClass
 {
     MMOItem bulletItem;
     int bulletType;
+    boolean isTracing;  //true - we should simpulate the fly by using speed to target point
+    float delay; // time is seconds before we start the bullet (used when isTracing = false)
     boolean isDamageOnlyTarget;
     StateClass state;
     PersonClass hostPerson;
@@ -32,7 +34,7 @@ public class BulletClass extends PersonClass
     
     public BulletClass(MMOItem bulletLink, float speed, float bRadius, int d, 
             Vector2 startPosition, Vector2 targetPosition, int bType,
-            boolean isDOT, PersonClass host, int hType)
+            boolean isDOT, PersonClass host, int hType, boolean _isTrace, float _delay)
     {//bRadius - это радиус воздействия снаряда. Для ракеты - это область повреждения
         super(bulletLink.getId(), "", speed, bRadius, 0);
         isHit = false;
@@ -44,6 +46,8 @@ public class BulletClass extends PersonClass
         bulletItem = bulletLink;
         bulletType = bType;
         isDamageOnlyTarget = isDOT;
+        isTracing = _isTrace;  // if isTracing=false, damage after delay time
+        delay = _delay;
         state = new StateClass(speed, this, false, 0);
         LocationClass location = new LocationClass();
         location.SetPosition(startPosition);
@@ -158,15 +162,12 @@ public class BulletClass extends PersonClass
     
     public boolean IsEffectedOnlyEnd()
     {//говорит true, если снаряд взаимодейтсвует только в конце своей жизни
-        /*if(bulletType == 0)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }*/
         return isDamageOnlyTarget;
+    }
+    
+    public boolean IsDelayOver()
+    {
+        return System.currentTimeMillis() - state.GetEmitTime() > delay * 1000;
     }
     
     public int GetBulletType()
@@ -202,6 +203,16 @@ public class BulletClass extends PersonClass
     public int GetHostType()
     {
         return hostType;
+    }
+    
+    public float GetDelay()
+    {
+        return delay;
+    }
+    
+    public boolean IsTracing()
+    {
+        return isTracing;
     }
     
     public int GetHostId()

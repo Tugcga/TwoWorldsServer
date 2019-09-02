@@ -138,7 +138,7 @@ public class NetworkDataProcess
         Vec3D pos = new Vec3D((float)damagePosX, (float)damagePosY, 0);
         List<User> users = GlobalGameData.room.getProximityList(pos);
         ISFSObject params = new SFSObject();
-        params.putBool("useBullet", useBullet);
+        params.putBool("useBullet", useBullet);  // false for monster atack and true for atack by bullet
         params.putInt("id", bulletId);
         params.putDouble("x", damagePosX);
         params.putDouble("y", damagePosY);
@@ -157,8 +157,9 @@ public class NetworkDataProcess
         
         //nex necessary data of the bullet
         params.putInt("id", bullet.GetId());
+        params.putFloat("delay", bullet.GetDelay());
         params.putFloat("speed", (float)bullet.GetSpeed());
-        params.putInt("buleltType", bullet.GetBulletType());
+        params.putInt("bulletType", bullet.GetBulletType());
         params.putFloat("damageRadius", bullet.GetRadius());
         
         params.putDouble("targetX", bullet.GetState().GetTargetLocation().GetPosition().GetX());

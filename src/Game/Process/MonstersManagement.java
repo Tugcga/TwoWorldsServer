@@ -50,36 +50,67 @@ public class MonstersManagement
         BulletParametersClass bulletParams = GlobalGameData.serverConfig.GetBulletParameters(bulletType);
         MMOItem newBulletItem = new MMOItem();
         Vector2 targetPosition = new Vector2();
-        if(!bulletParams.IsDamageOnlyTarget())
-        {//line bullet, check collisions with walls and enemies
-            Vector2 toVectore = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
-            toVectore.Normalize();
-            targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVectore.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVectore.GetY());
-            if(intersectionData.isIntersection)
-            {//may be we need to change target position
-                if(bulletParams.GetMaxDistance() > Vector2.GetDistance(startPoint, intersectionData.intersectionPoint))
-                {
-                    targetPosition.Set(intersectionData.intersectionPoint.GetX(), intersectionData.intersectionPoint.GetY());
+        Vector2 emitStartPoint = new Vector2(startPoint);
+        if(bulletParams.IsTrace())
+        {//traceble bullet (rocket or line bullet)
+            if(!bulletParams.IsDamageOnlyTarget())
+            {//line bullet, check collisions with walls and enemies
+                Vector2 toVectore = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
+                toVectore.Normalize();
+                targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVectore.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVectore.GetY());
+                if(intersectionData.isIntersection)
+                {//may be we need to change target position
+                    if(bulletParams.GetMaxDistance() > Vector2.GetDistance(startPoint, intersectionData.intersectionPoint))
+                    {
+                        targetPosition.Set(intersectionData.intersectionPoint.GetX(), intersectionData.intersectionPoint.GetY());
+                    }
+                }
+                else
+                {//Find intersection with maximal distance
+                    EdgeClass maxEdge = new EdgeClass(startPoint, targetPosition);
+                    IntersectionResultClass maxIntersection = GlobalGameData.collisionMap.GetIntersection(maxEdge);
+                    if(maxIntersection.isIntersection)
+                    {
+                        targetPosition.Set(maxIntersection.intersectionPoint.GetX(), maxIntersection.intersectionPoint.GetY());
+                    }
                 }
             }
             else
-            {//Find intersection with maximal distance
-                EdgeClass maxEdge = new EdgeClass(startPoint, targetPosition);
-                IntersectionResultClass maxIntersection = GlobalGameData.collisionMap.GetIntersection(maxEdge);
-                if(maxIntersection.isIntersection)
+            {//rocket bullet, only target point
+                if(bulletParams.GetMaxDistance() < Vector2.GetDistance(startPoint, targetPoint))
                 {
-                    targetPosition.Set(maxIntersection.intersectionPoint.GetX(), maxIntersection.intersectionPoint.GetY());
+                    Vector2 toVector = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
+                    toVector.Normalize();
+                    targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVector.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVector.GetY());
+                }
+                else
+                {
+                    targetPosition.Set(targetPoint.GetX(), targetPoint.GetY());
                 }
             }
         }
         else
-        {//rocket bullet, only target point
-            targetPosition.Set(targetPoint.GetX(), targetPoint.GetY());
+        {//bullet is non-traceble
+            //set target position not awayr from the host
+            if(bulletParams.GetMaxDistance() < Vector2.GetDistance(startPoint, targetPoint))
+            {
+                Vector2 toVector = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
+                toVector.Normalize();
+                targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVector.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVector.GetY());
+            }
+            else
+            {
+                targetPosition.Set(targetPoint.GetX(), targetPoint.GetY());
+            }
+            //also rewrite start position
+            emitStartPoint = new Vector2(targetPosition);
         }
+        
+        //GlobalGameData.server.trace("Target position: " + targetPosition);
         BulletClass newBullet = new BulletClass(newBulletItem, bulletParams.GetSpeed(), 
                 bulletParams.GetRadius(), bulletParams.GetDamage(),
-                startPoint, targetPosition, bulletType, bulletParams.IsDamageOnlyTarget(),
-                hostPerson, hostType);
+                emitStartPoint, targetPosition, bulletType, bulletParams.IsDamageOnlyTarget(),
+                hostPerson, hostType, bulletParams.IsTrace(), bulletParams.GetDelay());
         newBulletItem.setVariables(GetBulletVariables(newBullet, true));
         GlobalGameData.bullets.put(newBullet.GetId(), newBullet);
         NetworkDataProcess.SetBulletState(newBullet, false, true);
