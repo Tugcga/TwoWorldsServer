@@ -21,6 +21,7 @@ public class BulletClass extends PersonClass
     int bulletType;
     boolean isTracing;  //true - we should simpulate the fly by using speed to target point
     float delay; // time is seconds before we start the bullet (used when isTracing = false)
+    boolean isDelayOver;
     boolean isDamageOnlyTarget;
     StateClass state;
     PersonClass hostPerson;
@@ -48,6 +49,7 @@ public class BulletClass extends PersonClass
         isDamageOnlyTarget = isDOT;
         isTracing = _isTrace;  // if isTracing=false, damage after delay time
         delay = _delay;
+        isDelayOver = false;
         state = new StateClass(speed, this, false, 0);
         LocationClass location = new LocationClass();
         location.SetPosition(startPosition);
@@ -167,7 +169,18 @@ public class BulletClass extends PersonClass
     
     public boolean IsDelayOver()
     {
-        return System.currentTimeMillis() - state.GetEmitTime() > delay * 1000;
+        if(isDelayOver)
+        {
+            return true;
+        }
+        else
+        {
+            if(System.currentTimeMillis() - state.GetEmitTime() > delay * 1000)
+            {
+                isDelayOver = true;
+            }
+            return isDelayOver;
+        }
     }
     
     public int GetBulletType()
