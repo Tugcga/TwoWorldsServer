@@ -35,7 +35,7 @@ public class PlayerMovementControllerTask implements Runnable
                         boolean isStateNew = player.GetMovement().IsStateNew();
                         if(isStateNew)
                         {
-                            NetworkDataProcess.SayClientMoving(player);
+                            NetworkDataProcess.UpdateClientData(player);
                         }
                         NetworkDataProcess.SetPlayerState(player, isStateNew, false);
                     }
@@ -43,7 +43,7 @@ public class PlayerMovementControllerTask implements Runnable
                     {
                         if(player.GetMovement().IsStateNew())
                         {
-                            NetworkDataProcess.SayClientMoving(player);
+                            NetworkDataProcess.UpdateClientData(player);
                             NetworkDataProcess.SetPlayerState(player, true, false);
                         }
                     }

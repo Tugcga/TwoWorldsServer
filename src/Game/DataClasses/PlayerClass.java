@@ -75,7 +75,7 @@ public class PlayerClass extends PersonClass
             //set position at one of start points
             GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
             //Notificate all clients that player resurect
-            NetworkDataProcess.SayClientResurect(this);
+            NetworkDataProcess.UpdateClientData(this);
             NetworkDataProcess.SetPlayerState(this, true, false);
         }
     }

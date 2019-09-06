@@ -132,15 +132,7 @@ public class NetworkDataProcess
     {//send players to destroy bullet (as it life ending) and notify damage
         SayClientAtackResult(true, bullet.GetId(), bullet.GetPosition().GetX(), bullet.GetPosition().GetY(), bullet.GetHitData());
     }
-    
-    public static void SayClientResurect(PlayerClass player)
-    {
-        //GlobalGameData.server.trace("Call client resurect " + player.GetId());
-        List<User> users = GlobalGameData.room.getProximityList(player.GetPosition3D());
-        users.add(player.GetUser());
-        GlobalGameData.server.send("RPCPlayerResurect", player.GetMinimalParameters(), users);
-    }
-    
+        
     public static void SayTowerResurect(TowerClass tower)
     {
         //GlobalGameData.server.trace("Call tower resurect " + tower.GetId());
@@ -152,14 +144,12 @@ public class NetworkDataProcess
         GlobalGameData.server.send("RPCTowerResurect", params, users);
     }
     
-    public static void SayClientMoving(PlayerClass player)
-    {//call when changing player movement state
+    public static void UpdateClientData(PlayerClass player)
+    {//call when changing player movement state or resurect player
         List<User> users = GlobalGameData.room.getProximityList(player.GetPosition3D());
-        if(users.size() > 0)
-        {
-            //GlobalGameData.server.trace("Call client moving " + player.GetId());
-            GlobalGameData.server.send("RPCClientMoving", player.GetMinimalParameters(), users);
-        }
+        users.add(player.GetUser());
+        //GlobalGameData.server.trace("Call client moving " + player.GetId());
+        GlobalGameData.server.send("RPCClientUpdate", player.GetMinimalParameters(), users);
     }
         
     public static void SayMonsterChangeState(MonsterClass monster)
