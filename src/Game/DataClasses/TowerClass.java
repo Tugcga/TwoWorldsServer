@@ -89,6 +89,7 @@ public class TowerClass extends PersonClass
             isDeadInit = false;
             SetAlive();
             //Notificate all clients that tower resurects
+            NetworkDataProcess.SayTowerResurect(this);
             NetworkDataProcess.SetTowerState(this, true, false);
         }
     }

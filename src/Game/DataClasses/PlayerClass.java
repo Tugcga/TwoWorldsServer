@@ -75,6 +75,7 @@ public class PlayerClass extends PersonClass
             //set position at one of start points
             GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
             //Notificate all clients that player resurect
+            NetworkDataProcess.SayClientResurect(this);
             NetworkDataProcess.SetPlayerState(this, true, false);
         }
     }
@@ -97,6 +98,26 @@ public class PlayerClass extends PersonClass
     public int GetModelIndex()
     {
         return modelIndex;
+    }
+    
+    public ISFSObject GetMinimalParameters()
+    {//return some minimal set of parameters and values of the player (life, positions and so on)
+        //this set of parameters used when client is resurect, start moveing and sopmoving
+        ISFSObject toReturn = new SFSObject();
+        toReturn.putInt("id", GetId());
+        //life
+        toReturn.putInt("life", GetLife());
+        toReturn.putInt("maxLife", GetMaxLife());
+        //position
+        Vector2 position = GetPosition();
+        toReturn.putDouble("location_x", position.GetX());
+        toReturn.putDouble("location_y", position.GetY());
+        //moving
+        toReturn.putFloat("angle", GetAngle());
+        toReturn.putFloat("moveAngle", movement.GetMoveAngle());
+        toReturn.putBool("isMove", movement.IsMove());
+        toReturn.putDouble("speed", GetSpeed());
+        return toReturn;
     }
     
     public ISFSObject GetKillsData()

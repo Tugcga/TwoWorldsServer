@@ -35,7 +35,12 @@ public class MonsterControllerTask implements Runnable
                 else
                 {
                     //update variables of the monster
-                    NetworkDataProcess.SetMonsterState(monster, monster.GetState().IsStateNew(), false);
+                    boolean isStateNew = monster.GetState().IsStateNew();
+                    if(isStateNew)
+                    {
+                        NetworkDataProcess.SayMonsterChangeState(monster);
+                    }
+                    NetworkDataProcess.SetMonsterState(monster, isStateNew, false);
                 }
             }
             for(Iterator<Map.Entry<Integer, BulletClass>> it = GlobalGameData.bullets.entrySet().iterator(); it.hasNext();)

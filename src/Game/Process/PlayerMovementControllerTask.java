@@ -32,12 +32,18 @@ public class PlayerMovementControllerTask implements Runnable
                     if(player.GetMovement().IsMove())
                     {
                         player.GetMovement().MoveTick();
-                        NetworkDataProcess.SetPlayerState(player, player.GetMovement().IsStateNew(), false);
+                        boolean isStateNew = player.GetMovement().IsStateNew();
+                        if(isStateNew)
+                        {
+                            NetworkDataProcess.SayClientMoving(player);
+                        }
+                        NetworkDataProcess.SetPlayerState(player, isStateNew, false);
                     }
                     else
                     {
                         if(player.GetMovement().IsStateNew())
                         {
+                            NetworkDataProcess.SayClientMoving(player);
                             NetworkDataProcess.SetPlayerState(player, true, false);
                         }
                     }

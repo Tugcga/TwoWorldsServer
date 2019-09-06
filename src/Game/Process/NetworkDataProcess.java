@@ -133,6 +133,46 @@ public class NetworkDataProcess
         SayClientAtackResult(true, bullet.GetId(), bullet.GetPosition().GetX(), bullet.GetPosition().GetY(), bullet.GetHitData());
     }
     
+    public static void SayClientResurect(PlayerClass player)
+    {
+        //GlobalGameData.server.trace("Call client resurect " + player.GetId());
+        List<User> users = GlobalGameData.room.getProximityList(player.GetPosition3D());
+        users.add(player.GetUser());
+        GlobalGameData.server.send("RPCPlayerResurect", player.GetMinimalParameters(), users);
+    }
+    
+    public static void SayTowerResurect(TowerClass tower)
+    {
+        //GlobalGameData.server.trace("Call tower resurect " + tower.GetId());
+        List<User> users = GlobalGameData.room.getProximityList(tower.GetPosition3D());
+        ISFSObject params = new SFSObject();
+        params.putInt("id", tower.GetId());
+        params.putInt("life", tower.GetLife());
+        params.putInt("maxLife", tower.GetMaxLife());
+        GlobalGameData.server.send("RPCTowerResurect", params, users);
+    }
+    
+    public static void SayClientMoving(PlayerClass player)
+    {//call when changing player movement state
+        List<User> users = GlobalGameData.room.getProximityList(player.GetPosition3D());
+        if(users.size() > 0)
+        {
+            //GlobalGameData.server.trace("Call client moving " + player.GetId());
+            GlobalGameData.server.send("RPCClientMoving", player.GetMinimalParameters(), users);
+        }
+    }
+        
+    public static void SayMonsterChangeState(MonsterClass monster)
+    {//called whenthe state of the monster is changed
+        
+        List<User> users = GlobalGameData.room.getProximityList(monster.GetPosition3D());
+        if(users.size() > 0)
+        {
+            //GlobalGameData.server.trace("Call monster change state " + monster.GetId());
+            GlobalGameData.server.send("RPCMonsterChangeState", monster.GetMinimalParameters(), users);
+        }
+    }
+    
     public static void SayClientAtackResult(boolean useBullet, int bulletId, double damagePosX, double damagePosY, BulletHitDataClass hitData)
     {
         Vec3D pos = new Vec3D((float)damagePosX, (float)damagePosY, 0);
@@ -192,7 +232,7 @@ public class NetworkDataProcess
             params.putInt("monsterId", mosnterId);
             if(users.size() > 0)
             {
-                GlobalGameData.server.send("SayMonsterDead", params, users);    
+                GlobalGameData.server.send("RPCMonsterDead", params, users);    
             }
             
         }
@@ -212,7 +252,7 @@ public class NetworkDataProcess
             params.putFloat("atackTime", atackTime);
             if(users.size() > 0)
             {
-                GlobalGameData.server.send("SayMonsterStartAtack", params, users);    
+                GlobalGameData.server.send("RPCMonsterStartAtack", params, users);    
             }
         }
     }

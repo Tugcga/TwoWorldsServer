@@ -1,6 +1,8 @@
 
 package Game.DataClasses;
 
+import com.smartfoxserver.v2.entities.data.ISFSObject;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.mmo.MMOItem;
 import com.smartfoxserver.v2.mmo.Vec3D;
 
@@ -53,5 +55,31 @@ public class MonsterClass extends PersonClass
     public int GetMonsterType()
     {
         return monsterType;
+    }
+    
+    public ISFSObject GetMinimalParameters()
+    {//return some minimal set of parameters
+        //caled when monster start and stop moving
+        ISFSObject toReturn = new SFSObject();
+        toReturn.putInt("id", GetId());
+        //life
+        toReturn.putInt("life", GetLife());
+        toReturn.putInt("maxLife", GetMaxLife());
+        
+        //movement
+        toReturn.putInt("state", GetState().GetState());
+        toReturn.putDouble("speed", GetSpeed());
+        toReturn.putInt("target_type", GetState().GetTargetEnemyType());
+        toReturn.putInt("target_id", GetState().GetTargetEnemyId());
+        Vector2 targtPosition = GetState().GetTargetLocation().GetPosition();
+        toReturn.putDouble("target_position_x", targtPosition.GetX());
+        toReturn.putDouble("target_position_y", targtPosition.GetY());
+        
+        //position
+        Vector2 position = GetLocation().GetPosition();
+        toReturn.putDouble("position_x", position.GetX());
+        toReturn.putDouble("position_y", position.GetY());
+        
+        return toReturn;
     }
 }
