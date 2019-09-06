@@ -65,7 +65,7 @@ public class MonsterAtackerClass
         {
             if(state.GetState() == 2 && (System.currentTimeMillis() - lastAtackTime > lCoolDawn))
             {//преследуем врага
-                BoolFloatVec2Class enemyData = state.GetEnemyData();
+                BoolFloatVec2Class enemyData = state.GetEnemyData();//bool - is enemy exist, float - enemy radius, Vec2 - enemy position
                 if(enemyData.GetBoolValue())
                 {
                     if(Vector2.GetDistance(enemyData.GetVec2Value(), myPerson.GetPosition()) < damagRadius + myPerson.GetRadius() + enemyData.floatValue)
@@ -116,9 +116,18 @@ public class MonsterAtackerClass
     void FinishAtack()
     {
         isWaitEndAtack = false;
-        BulletHitDataClass hitData = new BulletHitDataClass();
-        BattleController.ApplyDamage(targetType, targetId, 1, myPerson.GetId(), damage, hitData);
-        Vector2 atackPoint = GetAtackPoint();
-        NetworkDataProcess.SayClientAtackResult(false, -1, atackPoint.GetX(), atackPoint.GetY(), hitData);
+        //check is monster near target to apply atack
+        BoolFloatVec2Class enemyData = state.GetEnemyData();//bool - is enemy exist, float - enemy radius, Vec2 - enemy position
+        if(enemyData.GetBoolValue())
+        {
+            if(Vector2.GetDistance(enemyData.GetVec2Value(), myPerson.GetPosition()) < damagRadius + myPerson.GetRadius() + enemyData.floatValue)
+            {
+                //apply damage
+                BulletHitDataClass hitData = new BulletHitDataClass();
+                BattleController.ApplyDamage(targetType, targetId, 1, myPerson.GetId(), damage, hitData);
+                Vector2 atackPoint = GetAtackPoint();
+                NetworkDataProcess.SayClientAtackResult(false, -1, atackPoint.GetX(), atackPoint.GetY(), hitData);
+            }
+        }
     }
 }

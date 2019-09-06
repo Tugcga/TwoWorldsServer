@@ -56,7 +56,7 @@ public class StateClass
             if(!person.GetIsDead())
             {
                 //Find target
-                IntIntBoolClass enemyTarget = enemies.GetEnemy(person.GetPosition(), enemySearchRadius);
+                IntIntBoolClass enemyTarget = enemies.GetEnemy(person.GetPosition(), enemySearchRadius);//type, id, isExist
                 if(enemyTarget.GetBoolValue())
                 {//target is visible
                     if(currentState == 2)
@@ -273,7 +273,7 @@ public class StateClass
             }
         }
         else if(toEnemyData.GetValue01() == 1)
-        {//target is mosnter
+        {//target is monster
             
         }
         else if(toEnemyData.GetValue01() == 2)
