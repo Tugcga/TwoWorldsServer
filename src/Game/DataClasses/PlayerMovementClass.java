@@ -25,7 +25,7 @@ public class PlayerMovementClass
     
     //technical parameters
     float deltaWall;
-    float rebuildDestTime;
+    //float rebuildDestTime;
     
     //calculated for move parameters
     //Vector2 destinationWalkPosition;
@@ -43,14 +43,14 @@ public class PlayerMovementClass
         isMove = false;
         dirIndex = -1;
         deltaWall = GlobalGameData.serverConfig.GetPlayerMovementDeltaWallDistance();
-        rebuildDestTime = GlobalGameData.serverConfig.GetPlayerMovementRebuildPointTime();
+        //rebuildDestTime = GlobalGameData.serverConfig.GetPlayerMovementRebuildPointTime();
         //destinationWalkPosition = new Vector2();
         destinationData = new DestinationPointData();
         moveSpeed = speed;//at default moveSpeed is equal to player's speed
         direction = new Vector2(1, 0);
     }
     
-    DestinationPointData GetDestinationPoint()
+    /*DestinationPointData GetDestinationPoint()
     {
         DestinationPointData toReturn = new DestinationPointData();
         toReturn.isMoveble = false;
@@ -92,7 +92,7 @@ public class PlayerMovementClass
         direction = Vector2.Subtract(toReturn.point, parent.GetPosition());
         direction.Normalize();
         return toReturn;
-    }
+    }*/
     
     public void SetDirIndex(int newDI)
     {
@@ -101,15 +101,17 @@ public class PlayerMovementClass
             dirIndex = newDI;
             if(dirIndex >=0 && dirIndex <= 7)
             {
-                clientDirection = Vector2.GetDirectionFromIndex(dirIndex);
-                destinationData = GetDestinationPoint();
+                //clientDirection = Vector2.GetDirectionFromIndex(dirIndex);
+                direction = Vector2.GetDirectionFromIndex(dirIndex);
+                /*destinationData = GetDestinationPoint();
                 isMove = destinationData.isMoveble;
                 if(isMove == false)
                 {
                     dirIndex = -1;
-                }
+                }*/
+                isMove = true;
                 isStateNew = true;
-                lastTickTime = System.currentTimeMillis();   
+                lastTickTime = System.currentTimeMillis();
             }
             else if(dirIndex == -1)
             {
@@ -126,7 +128,7 @@ public class PlayerMovementClass
             float deltaTime = (float)(System.currentTimeMillis() - lastTickTime) / 1000f;
             Vector2 currentPosition = parent.GetPosition();
             Vector2 newPosition = new Vector2(currentPosition.GetX() + moveSpeed * deltaTime * direction.GetX(), currentPosition.GetY() + moveSpeed * deltaTime * direction.GetY());
-            parent.GetLocation().SetPosition(newPosition);
+            /*parent.GetLocation().SetPosition(newPosition);
             //check we finish to destination position
             if(Vector2.Dot(direction, Vector2.Subtract(destinationData.point, parent.GetPosition())) < 0)
             {//Update destination point
@@ -145,6 +147,58 @@ public class PlayerMovementClass
                     }
                 }
                 isStateNew = true; //здесь по сути говорим обновить полжение на всех клиентах. Когда дошли до промежуточной точки
+            }*/
+            //check intersection with the wall
+            EdgeClass walkPath = new EdgeClass(currentPosition, newPosition);        
+            IntersectionResultClass walkPathIntersection = GlobalGameData.collisionMap.GetIntersection(walkPath);
+            if(walkPathIntersection.isIntersection)
+            {
+                CollisionEdgeClass wall = GlobalGameData.collisionMap.GetEdge(walkPathIntersection.intersectedEdgeIndex);
+                //Check we in positive side
+                if(wall.IsPointOnPositiveSide(currentPosition))
+                {
+                    //GlobalGameData.server.trace(walkPath.direction + " : " + wall.direction + " : " + wall.normal);
+                    double dot = Vector2.Dot(wall.normal, walkPath.direction);
+                    Vector2 normalShift = Vector2.MultiplyByScalar(wall.normal, -1 * Vector2.Dot(wall.normal, walkPath.direction));
+                    Vector2 newPositionShift = Vector2.Add(newPosition, normalShift);
+                    
+                    //next we should check is this new shifted position intersect with the walls
+                    //if so, stop moving
+                    //again, create the path
+                    EdgeClass secondWalkPath = new EdgeClass(currentPosition, newPositionShift);
+                    IntersectionResultClass secondIntersection = GlobalGameData.collisionMap.GetIntersection(secondWalkPath);
+                    if(secondIntersection.isIntersection)
+                    {//there is intersection, stop the moving
+                        isMove = false;
+                        dirIndex = -1;
+                        isStateNew = true;
+                    }
+                    else
+                    {//no intersection, move the player
+                        parent.GetLocation().SetPosition(newPositionShift);
+                    }
+                    
+                    //Check is we inside the delta layer of the wall
+                    /*if(wall.GetDistance(parent.GetPosition()) < deltaWall)
+                    {//we inside, stop moving
+                        toReturn.isMoveble = false;
+                    }
+                    else
+                    {
+                        //we near the wall. Calculate detination point in 0.5 of layer thickness
+                        toReturn.point = Vector2.Add(walkPathIntersection.intersectionPoint, Vector2.MultiplyByScalar(wall.GetNormal(), 0.5 * deltaWall));
+                        toReturn.isMoveble = true;
+                        toReturn.isLastPoint = true;
+                    }*/
+                }
+                else
+                {//we inside the wall. Move freely
+                    parent.GetLocation().SetPosition(newPosition);
+                }
+            }
+            else
+            {//no itersection, set the point
+                parent.GetLocation().SetPosition(newPosition);
             }
         }
         lastTickTime = System.currentTimeMillis();

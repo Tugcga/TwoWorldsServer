@@ -40,7 +40,7 @@ public class MonsterControllerTask implements Runnable
                     {
                         NetworkDataProcess.SayMonsterChangeState(monster);
                     }
-                    NetworkDataProcess.SetMonsterState(monster, isStateNew, false);
+                    NetworkDataProcess.SetMonsterState(monster, false, false);
                 }
             }
             for(Iterator<Map.Entry<Integer, BulletClass>> it = GlobalGameData.bullets.entrySet().iterator(); it.hasNext();)

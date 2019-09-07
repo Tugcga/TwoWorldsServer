@@ -37,7 +37,7 @@ public class PlayerMovementControllerTask implements Runnable
                         {
                             NetworkDataProcess.UpdateClientData(player);
                         }
-                        NetworkDataProcess.SetPlayerState(player, isStateNew, false);
+                        NetworkDataProcess.SetPlayerState(player, false, false);
                     }
                     else
                     {
