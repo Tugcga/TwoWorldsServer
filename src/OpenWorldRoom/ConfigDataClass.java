@@ -42,10 +42,10 @@ public class ConfigDataClass
     public int GetMaxCountRTree(){return maxCountRTree;}
     float collisionEdgeDelta;
     public float GetCollisionEdgeDelta() {return collisionEdgeDelta;}
-    float playerMovementRebuildPointTime;
-    public float GetPlayerMovementRebuildPointTime() {return playerMovementRebuildPointTime;}
-    float playerMovementDeltaWallDistance;
-    public float GetPlayerMovementDeltaWallDistance() {return playerMovementDeltaWallDistance;}
+    //float playerMovementRebuildPointTime;
+    //public float GetPlayerMovementRebuildPointTime() {return playerMovementRebuildPointTime;}
+    //float playerMovementDeltaWallDistance;
+    //public float GetPlayerMovementDeltaWallDistance() {return playerMovementDeltaWallDistance;}
     int towerResurectMonsterTime;
     public int GetTowerResurectMonsterTime() {return towerResurectMonsterTime;}
     int towerAtackTickTime;
@@ -94,8 +94,8 @@ public class ConfigDataClass
         killsNotificatorTime = serverParams.getInt("killsNotificatorTime");
         maxCountRTree = serverParams.getInt("maxCountRTree");
         collisionEdgeDelta = serverParams.getFloat("collisionEdgeDelta");
-        playerMovementRebuildPointTime = serverParams.getFloat("playerMovementRebuildPointTime");
-        playerMovementDeltaWallDistance = serverParams.getFloat("playerMovementDeltaWallDistance");
+        //playerMovementRebuildPointTime = serverParams.getFloat("playerMovementRebuildPointTime");
+        //playerMovementDeltaWallDistance = serverParams.getFloat("playerMovementDeltaWallDistance");
         towerResurectMonsterTime = serverParams.getInt("towerResurectMonsterTime");
         towerAtackTickTime = serverParams.getInt("towerAtackTickTime");
     }

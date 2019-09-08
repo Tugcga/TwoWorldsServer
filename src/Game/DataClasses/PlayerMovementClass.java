@@ -24,7 +24,7 @@ public class PlayerMovementClass
     Vector2 clientDirection;
     
     //technical parameters
-    float deltaWall;
+    //float deltaWall;
     //float rebuildDestTime;
     
     //calculated for move parameters
@@ -42,7 +42,7 @@ public class PlayerMovementClass
         speed = s;
         isMove = false;
         dirIndex = -1;
-        deltaWall = GlobalGameData.serverConfig.GetPlayerMovementDeltaWallDistance();
+        //deltaWall = GlobalGameData.serverConfig.GetPlayerMovementDeltaWallDistance();
         //rebuildDestTime = GlobalGameData.serverConfig.GetPlayerMovementRebuildPointTime();
         //destinationWalkPosition = new Vector2();
         destinationData = new DestinationPointData();
@@ -161,23 +161,31 @@ public class PlayerMovementClass
                     double dot = Vector2.Dot(wall.normal, walkPath.direction);
                     Vector2 normalShift = Vector2.MultiplyByScalar(wall.normal, -1 * Vector2.Dot(wall.normal, walkPath.direction));
                     Vector2 newPositionShift = Vector2.Add(newPosition, normalShift);
-                    
-                    //next we should check is this new shifted position intersect with the walls
-                    //if so, stop moving
-                    //again, create the path
-                    EdgeClass secondWalkPath = new EdgeClass(currentPosition, newPositionShift);
-                    IntersectionResultClass secondIntersection = GlobalGameData.collisionMap.GetIntersection(secondWalkPath);
-                    if(secondIntersection.isIntersection)
-                    {//there is intersection, stop the moving
+                    //if shifted position too close to original position, then we collide with horizontal or vertical wall, stop here
+                    if(Vector2.GetDistance(currentPosition, newPositionShift) < 0.05f)
+                    {
                         isMove = false;
                         dirIndex = -1;
                         isStateNew = true;
                     }
                     else
-                    {//no intersection, move the player
-                        parent.GetLocation().SetPosition(newPositionShift);
+                    {
+                        //next we should check is this new shifted position intersect with the walls
+                        //if so, stop moving
+                        //again, create the path
+                        EdgeClass secondWalkPath = new EdgeClass(currentPosition, newPositionShift);
+                        IntersectionResultClass secondIntersection = GlobalGameData.collisionMap.GetIntersection(secondWalkPath);
+                        if(secondIntersection.isIntersection)
+                        {//there is intersection, stop the moving
+                            isMove = false;
+                            dirIndex = -1;
+                            isStateNew = true;
+                        }
+                        else
+                        {//no intersection, move the player
+                            parent.GetLocation().SetPosition(newPositionShift);
+                        }
                     }
-                    
                     //Check is we inside the delta layer of the wall
                     /*if(wall.GetDistance(parent.GetPosition()) < deltaWall)
                     {//we inside, stop moving
