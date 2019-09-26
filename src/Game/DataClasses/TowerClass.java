@@ -23,11 +23,11 @@ public class TowerClass extends PersonClass
     boolean isSpawnMonsterInDead;
     boolean isAgreMonsterToAtacker;
     
-    public TowerClass(MMOItem towerLink, int tType, float radius, int life, int mCount, 
+    public TowerClass(MMOItem towerLink, int tType, String towerName, float radius, int life, int mCount, 
             float mMinRadius, float mMaxRadius, float atackRadius, float atackCD, int bulletType,
             float accRadius, long resurectTime, boolean tIsSpawnInDead, boolean tIsAgreMonsterToAtacker, int bPerShot)
     {
-        super(towerLink.getId(), "Tower_" + towerLink.getId(), 0, radius, life);
+        super(towerLink.getId(), towerName, 0, radius, life);
         tower = towerLink;
         towerType = tType;
         isSpawnMonsterInDead = tIsSpawnInDead;

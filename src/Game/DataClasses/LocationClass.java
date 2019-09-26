@@ -1,4 +1,3 @@
-
 package Game.DataClasses;
 
 public class LocationClass 

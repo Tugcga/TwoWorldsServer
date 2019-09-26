@@ -75,6 +75,7 @@ public class OpenWorldRoomExtension extends SFSExtension
         GlobalGameData.monsters = new ConcurrentHashMap<Integer, MonsterClass>();
         GlobalGameData.bullets = new ConcurrentHashMap<Integer, BulletClass>();
         GlobalGameData.towers = new ConcurrentHashMap<Integer, TowerClass>();
+        //GlobalGameData.loginNames = new ConcurrentHashMap<String, Integer>();
         GlobalGameData.room = (MMORoom) this.getParentRoom();
         GlobalGameData.sfs = SmartFoxServer.getInstance();
         GlobalGameData.api = getApi();

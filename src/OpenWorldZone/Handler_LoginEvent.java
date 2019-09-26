@@ -1,8 +1,12 @@
 package OpenWorldZone;
 
+import Game.DataClasses.GlobalGameData;
+import OpenWorldRoom.Logger;
 import com.smartfoxserver.bitswarm.sessions.Session;
 import com.smartfoxserver.v2.core.ISFSEvent;
+import com.smartfoxserver.v2.core.SFSConstants;
 import com.smartfoxserver.v2.core.SFSEventParam;
+import com.smartfoxserver.v2.entities.Loggable;
 import com.smartfoxserver.v2.entities.Zone;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.exceptions.SFSErrorCode;
@@ -17,11 +21,12 @@ public class Handler_LoginEvent extends BaseServerEventHandler
     public void handleServerEvent(ISFSEvent event) throws SFSException 
     {
         //read input parameters
-        String userName = (String) event.getParameter(SFSEventParam.LOGIN_NAME);
+        String userName = LoginNamesController.FilterName((String)event.getParameter(SFSEventParam.LOGIN_NAME));
         String cryptedPass = (String) event.getParameter(SFSEventParam.LOGIN_PASSWORD);
         //Zone zone = (Zone)event.getParameter(SFSEventParam.ZONE);
         Session session = (Session)event.getParameter(SFSEventParam.SESSION);
         SFSObject inData = (SFSObject) event.getParameter(SFSEventParam.LOGIN_IN_DATA);  // get data of the login
+        SFSObject outData = (SFSObject) event.getParameter(SFSEventParam.LOGIN_OUT_DATA);
         
         trace("Client try name: " + userName + " and password: " + cryptedPass);
         
@@ -41,6 +46,9 @@ public class Handler_LoginEvent extends BaseServerEventHandler
                 //here we save data about logn model_index
                 if(inData.containsKey("model_index"))
                 {
+                    String newName = LoginNamesController.AddLoginName(userName);
+                    outData.putUtfString(SFSConstants.NEW_LOGIN_NAME, newName);
+                    
                     ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getInt("model_index"));
                 }
                 else

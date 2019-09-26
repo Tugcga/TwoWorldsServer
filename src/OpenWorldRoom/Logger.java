@@ -13,4 +13,9 @@ public class Logger
     {
         GlobalGameData.server.trace(message);
     }
+    
+    public static void Log(Object message)
+    {
+        GlobalGameData.server.trace(message);
+    }
 }

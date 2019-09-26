@@ -111,7 +111,6 @@ public class NetworkDataProcess
             //Logger.Log(emc.toString());
             Logger.Log("Bullet " + bullet.GetId() + " out of map limit");
         }
-        
     }
     
     public static void SetTowerState(TowerClass tower, boolean isUpdateOnClients, boolean isFirstCall)

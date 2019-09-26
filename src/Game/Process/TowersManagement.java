@@ -35,24 +35,25 @@ public class TowersManagement
                 if(!"".equals(part))
                 {
                     String[] idAndCoords = part.split(",");
-                    if(idAndCoords.length == 3 && !"".equals(idAndCoords[0]) && !"".equals(idAndCoords[1])&& !"".equals(idAndCoords[2]))
+                    if(idAndCoords.length == 4 && !"".equals(idAndCoords[0]) && !"".equals(idAndCoords[1])&& !"".equals(idAndCoords[2]))
                     {
                         Vector2 tPosition = new Vector2(idAndCoords[1], idAndCoords[2]);
                         int tType = Integer.parseInt(idAndCoords[0]);
-                        CreateTower(tType, tPosition);
+                        String towerName = idAndCoords[3];
+                        CreateTower(tType, tPosition, towerName);
                     }
                 }
             }
         }
     }
     
-    static void CreateTower(int type, Vector2 position)
+    static void CreateTower(int type, Vector2 position, String name)
     {
         TowerParametersClass tParams = GlobalGameData.serverConfig.GetTowerParameters(type);
         LocationClass towerLocation = new LocationClass();
         towerLocation.SetLocation(position.GetX(), position.GetY());
         MMOItem newTowerItem = new MMOItem();
-        TowerClass newTower = new TowerClass(newTowerItem, type, 
+        TowerClass newTower = new TowerClass(newTowerItem, type, name,
                                             tParams.GetRadius(), tParams.GetLife(), 
                                             tParams.GetMonstersCount(), tParams.GetMonstersMinRadius(), 
                                             tParams.GetMonstersMaxRadius(), tParams.GetVisibleRadius(),

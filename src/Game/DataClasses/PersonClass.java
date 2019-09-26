@@ -45,8 +45,9 @@ public class PersonClass
         return forceDestroy;
     }
     
-    public void ApplyDamage(int damage)
-    {
+    public boolean ApplyDamage(int damage)
+    {//return true if person is dead after this damage
+        boolean oldDead = isDead;
         if(!isDead)
         {
             life = life - damage;
@@ -55,6 +56,14 @@ public class PersonClass
                 life = 0;
                 isDead = true;
             }
+        }
+        if(oldDead)
+        {
+            return false;
+        }
+        else
+        {
+            return oldDead != isDead;
         }
         //Logger.Log("Apply damage " + damage + " result is " + life + " " + isDead);
     }

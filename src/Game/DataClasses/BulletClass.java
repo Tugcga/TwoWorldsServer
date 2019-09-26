@@ -1,13 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import Game.Process.BattleController;
-import Game.Process.NetworkDataProcess;
-import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.mmo.BaseMMOItem;
 import com.smartfoxserver.v2.mmo.MMOItem;
@@ -36,7 +29,7 @@ public class BulletClass extends PersonClass
     public BulletClass(MMOItem bulletLink, float speed, float bRadius, int d, 
             Vector2 startPosition, Vector2 targetPosition, int bType,
             boolean isDOT, PersonClass host, int hType, boolean _isTrace, float _delay)
-    {//bRadius - это радиус воздействия снаряда. Для ракеты - это область повреждения
+    {//bRadius - damage size for line bullet and damage radius for rocket bullet
         super(bulletLink.getId(), "", speed, bRadius, 0);
         isHit = false;
         hitData = new BulletHitDataClass();
@@ -72,7 +65,6 @@ public class BulletClass extends PersonClass
     {
         for(IntIntFloatClass col : collisions)
         {//type, id, distance
-            //Logger.Log("type: " + col.int01Value + " id: " + col.int02Value);
             BattleController.ApplyDamage(col.int01Value, col.int02Value, hostType, hostId, damage, hitData);
         }
         
@@ -163,7 +155,7 @@ public class BulletClass extends PersonClass
     }
     
     public boolean IsEffectedOnlyEnd()
-    {//говорит true, если снаряд взаимодейтсвует только в конце своей жизни
+    {//true if the bullet can damage only at the end
         return isDamageOnlyTarget;
     }
     

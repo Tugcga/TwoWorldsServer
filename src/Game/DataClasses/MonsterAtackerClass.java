@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import Game.Process.BattleController;
@@ -15,16 +10,16 @@ public class MonsterAtackerClass
     
     int damage;
     float damagRadius;
-    int weaponType;//параметр bullet у монстра. У не стреляющих -1
+    int weaponType;  // for mosnter bullet, for non-shot is -1
     
     long lCoolDawn;
     long lastAtackTime;
     
     boolean isWaitEndAtack;
     long atackStartTime;
-    long atackLengthTime;//время выоплнения атаки, после окончания начисляются повреждения
+    long atackLengthTime;  // the length of the atack, after this time damage
     float fAtackLengthTime;
-    int targetType;//записываем сюда того, на кого началась атака
+    int targetType;  // who start the atack
     int targetId;
     
     public MonsterAtackerClass(StateClass sLink, PersonClass persLink, int mDamage, float mDamageRadius, int mWType, float coolDawn, float atackLength)
@@ -55,7 +50,7 @@ public class MonsterAtackerClass
     public void AtackTick()
     {
         if(isWaitEndAtack)
-        {//наносим удар, ждем окончания
+        {// damage process, wait the end
             if(System.currentTimeMillis() - atackStartTime > atackLengthTime)
             {
                 FinishAtack();
@@ -64,7 +59,7 @@ public class MonsterAtackerClass
         else
         {
             if(state.GetState() == 2 && (System.currentTimeMillis() - lastAtackTime > lCoolDawn))
-            {//преследуем врага
+            {// follow to enemy
                 BoolFloatVec2Class enemyData = state.GetEnemyData();//bool - is enemy exist, float - enemy radius, Vec2 - enemy position
                 if(enemyData.GetBoolValue())
                 {

@@ -25,4 +25,6 @@ public class GlobalGameData
     public static Map<Integer, MonsterClass> monsters;
     public static Map<Integer, BulletClass> bullets;
     public static Map<Integer, TowerClass> towers;
+    
+    public static Map<String, Integer> loginNames;  // store here login user names and count the count of these names
 }

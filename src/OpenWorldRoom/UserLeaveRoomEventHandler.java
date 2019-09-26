@@ -5,6 +5,8 @@
  */
 package OpenWorldRoom;
 
+import Game.DataClasses.GlobalGameData;
+import OpenWorldZone.LoginNamesController;
 import Game.Process.ClientsManagement;
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.core.SFSEventParam;
@@ -24,6 +26,8 @@ public class UserLeaveRoomEventHandler extends BaseServerEventHandler
             User user = (User) event.getParameter(SFSEventParam.USER);
             trace("User " + user.getName() + " leave the room");
             ClientsManagement.ClientLeaveTheGame(user);
+            
+            GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("RemoveName", user.getName());
 	}
     
 }

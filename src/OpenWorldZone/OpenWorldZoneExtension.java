@@ -1,5 +1,6 @@
 package OpenWorldZone;
 
+import Game.DataClasses.GlobalGameData;
 import com.smartfoxserver.v2.controllers.SystemRequest;
 import com.smartfoxserver.v2.controllers.filter.ISystemFilterChain;
 import com.smartfoxserver.v2.controllers.filter.SysControllerFilterChain;
@@ -26,6 +27,8 @@ public class OpenWorldZoneExtension extends SFSExtension
     {
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
+        GlobalGameData.loginNames = new ConcurrentHashMap<String, Integer>();
+        
         addEventHandler(SFSEventType.SERVER_READY, Handler_ServerReady.class);
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
         addEventHandler(SFSEventType.USER_LOGOUT, Handler_UserLogout.class);
@@ -98,6 +101,11 @@ public class OpenWorldZoneExtension extends SFSExtension
         {
             User user = (User)params;
             getApi().disconnectUser(user);
+        }
+        else if(cmdName.equals("RemoveName"))
+        {
+            String name = (String)params;
+            LoginNamesController.RemoveLoginName(name);
         }
         return null;
     }

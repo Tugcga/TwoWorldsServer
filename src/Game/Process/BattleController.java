@@ -54,9 +54,9 @@ public class BattleController
             if(GlobalGameData.towers.containsKey(targetId))
             {
                 TowerClass tower = GlobalGameData.towers.get(targetId);
-                tower.ApplyDamage(damage);
+                boolean isDestory = tower.ApplyDamage(damage);
                 //NetworkDataProcess.SetTowerState(tower, true, false);
-                if(tower.GetIsDead())
+                if(isDestory && tower.GetIsDead())
                 {
                     WriteKillFact(2, tower.GetId(), atackerType, atackerId);
                     tower.StartDeath();
@@ -66,6 +66,7 @@ public class BattleController
                     tower.AddDamageData(atackerType, atackerId, damage);
                 }
                 hitData.AddData(2, targetId, tower.GetLife(), tower.GetMaxLife(), tower.GetIsDead(), 0, tower.GetPosition());
+                NetworkDataProcess.SetTowerState(tower, false, false);
             }
         }
     }
