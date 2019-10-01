@@ -43,14 +43,11 @@ public class OpenWorldZoneExtension extends SFSExtension
         // Plug the filter chain
         getParentZone().setFilterChain(SystemRequest.JoinRoom, blockingChain);
         getParentZone().setFilterChain(SystemRequest.CreateRoom, blockingChain);
-        getParentZone().setFilterChain(SystemRequest.ObjectMessage, blockingChain);
         getParentZone().setFilterChain(SystemRequest.SetRoomVariables, blockingChain);
         getParentZone().setFilterChain(SystemRequest.SetUserVariables, blockingChain);
         getParentZone().setFilterChain(SystemRequest.LeaveRoom, blockingChain);
         getParentZone().setFilterChain(SystemRequest.SubscribeRoomGroup, blockingChain);
         getParentZone().setFilterChain(SystemRequest.UnsubscribeRoomGroup, blockingChain);
-        getParentZone().setFilterChain(SystemRequest.PublicMessage, blockingChain);  // for messages other filters should be created
-        getParentZone().setFilterChain(SystemRequest.PrivateMessage, blockingChain);
         getParentZone().setFilterChain(SystemRequest.ModeratorMessage, blockingChain);
         getParentZone().setFilterChain(SystemRequest.AdminMessage, blockingChain);
         getParentZone().setFilterChain(SystemRequest.KickUser, blockingChain);
@@ -64,6 +61,12 @@ public class OpenWorldZoneExtension extends SFSExtension
         getParentZone().setFilterChain(SystemRequest.InviteUser, blockingChain);
         getParentZone().setFilterChain(SystemRequest.InvitationReply, blockingChain);
         getParentZone().setFilterChain(SystemRequest.QuickJoinGame, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.ObjectMessage, blockingChain);
+        getParentZone().setFilterChain(SystemRequest.PrivateMessage, blockingChain);
+        
+        ISystemFilterChain messageChain = new SysControllerFilterChain();
+        messageChain.addFilter("public_message", new Filter_PublicMessage());
+        getParentZone().setFilterChain(SystemRequest.PublicMessage, messageChain);
         
         //additional system 
         //Handshake, Login, Logout, GetRoomList, AutoJoin, GenericMessage, ChangeRoomName, ChangeRoomPassword,

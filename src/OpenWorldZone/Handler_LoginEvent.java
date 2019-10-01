@@ -22,22 +22,22 @@ public class Handler_LoginEvent extends BaseServerEventHandler
     {
         //read input parameters
         String userName = LoginNamesController.FilterName((String)event.getParameter(SFSEventParam.LOGIN_NAME));
-        String cryptedPass = (String) event.getParameter(SFSEventParam.LOGIN_PASSWORD);
+        //String cryptedPass = (String) event.getParameter(SFSEventParam.LOGIN_PASSWORD);
         //Zone zone = (Zone)event.getParameter(SFSEventParam.ZONE);
         Session session = (Session)event.getParameter(SFSEventParam.SESSION);
         SFSObject inData = (SFSObject) event.getParameter(SFSEventParam.LOGIN_IN_DATA);  // get data of the login
         SFSObject outData = (SFSObject) event.getParameter(SFSEventParam.LOGIN_OUT_DATA);
         
-        trace("Client try name: " + userName + " and password: " + cryptedPass);
+        //trace("Client try name: " + userName + " and password: " + cryptedPass);
         
-        if("qwerty".equals(userName))//for test only
+        /*if("qwerty".equals(userName))//for test only
         {//wrong user name
             SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_BAD_USERNAME);  // return client message abount wrong name
             errData.addParameter(userName);
             // This is logged on the server side
             throw new SFSLoginException("Bad user name: " + userName, errData);
-        }
-        else
+        }*/
+        //else
         {//correct user name. Login it and send data about available models
             //if the login is correct, automaticaly join it to the first room
             //in fact, here we can separate the connection flow and connect exeptional user to the other room
