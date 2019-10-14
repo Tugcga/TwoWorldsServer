@@ -122,7 +122,7 @@ public class NetworkDataProcess
     
     public static void SendClientsDestroyBullet(BulletClass bullet)
     {//send players to destroy bullet (as it life ending) and notify damage
-        SayClientAtackResult(true, bullet.GetId(), bullet.GetPosition().GetX(), bullet.GetPosition().GetY(), bullet.GetHitData());
+        SayClientAtackResult(true, bullet.GetId(), bullet.GetBulletType(), bullet.GetPosition().GetX(), bullet.GetPosition().GetY(), bullet.GetHitData());
     }
         
     public static void SayTowerResurect(TowerClass tower)
@@ -155,7 +155,7 @@ public class NetworkDataProcess
         }
     }
     
-    public static void SayClientAtackResult(boolean useBullet, int bulletId, double damagePosX, double damagePosY, BulletHitDataClass hitData)
+    public static void SayClientAtackResult(boolean useBullet, int bulletId, int bulletType, double damagePosX, double damagePosY, BulletHitDataClass hitData)
     {
         Vec3D pos = new Vec3D((float)damagePosX, (float)damagePosY, 0);
         List<User> users = GlobalGameData.room.getProximityList(pos);
@@ -164,6 +164,7 @@ public class NetworkDataProcess
         params.putInt("id", bulletId);
         params.putDouble("x", damagePosX);
         params.putDouble("y", damagePosY);
+        params.putInt("type", bulletType);
         params.putSFSArray("hitData", hitData.GetSFSArray());
         GlobalGameData.server.send("RPCDestoyBullet", params, users);
     }

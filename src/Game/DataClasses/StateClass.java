@@ -68,12 +68,12 @@ public class StateClass
                 else
                 {//no visible target
                     if(currentState == 2)
-                    {//если цель только исчезла, то переводим в iddle
+                    {//targt invisible, switch to iddle
                         SetStateToMove(person.GetPosition());
                         ComeToTarget();
                     }
                     else
-                    {//цели нет, и состояние 0 или 1. Продолжаем его
+                    {//no targets, continue the state
                         if(currentState == 0)
                         {
                             if(System.currentTimeMillis() - lastSwitchTime > switchTime)

@@ -7,17 +7,14 @@ import Game.DataClasses.MonsterClass;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.StartPointsClass;
 import Game.DataClasses.TowerClass;
+import Game.Process.FilterLoggedUsersTask;
 import Game.Process.KillsNotificatorTask;
 import Game.Process.MonsterControllerTask;
 import Game.Process.PlayerMovementControllerTask;
 import Game.Process.TowerAtackerTask;
 import Game.Process.TowerMonsterResurectorTask;
 import Game.Process.TowersManagement;
-import OpenWorldZone.Filter_BlockRequest;
 import com.smartfoxserver.v2.SmartFoxServer;
-import com.smartfoxserver.v2.controllers.SystemRequest;
-import com.smartfoxserver.v2.controllers.filter.ISystemFilterChain;
-import com.smartfoxserver.v2.controllers.filter.SysControllerFilterChain;
 import com.smartfoxserver.v2.core.SFSEventType;
 import com.smartfoxserver.v2.extensions.SFSExtension;
 import com.smartfoxserver.v2.mmo.MMORoom;
@@ -35,6 +32,7 @@ public class OpenWorldRoomExtension extends SFSExtension
     private ScheduledFuture<?> killsNotificator;
     private ScheduledFuture<?> towerMonsterResurectorTask;
     private ScheduledFuture<?> towerAtackerTask;
+    private ScheduledFuture<?> filterLoggedUsersTask;
 
     @Override
     public void init() 
@@ -63,7 +61,7 @@ public class OpenWorldRoomExtension extends SFSExtension
             killsNotificator = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new KillsNotificatorTask(), GlobalGameData.serverConfig.GetKillsNotificatorTime(), GlobalGameData.serverConfig.GetKillsNotificatorTime(), TimeUnit.MILLISECONDS);
             towerMonsterResurectorTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerMonsterResurectorTask(), 0, GlobalGameData.serverConfig.GetTowerResurectMonsterTime(), TimeUnit.MILLISECONDS);
             towerAtackerTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerAtackerTask(), 0, GlobalGameData.serverConfig.GetTowerAtackTickTime(), TimeUnit.MILLISECONDS);
-        
+            filterLoggedUsersTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new FilterLoggedUsersTask(), GlobalGameData.serverConfig.GetFilterLoggedUserNamesTime(), GlobalGameData.serverConfig.GetFilterLoggedUserNamesTime(), TimeUnit.MILLISECONDS);
         }
         catch (IOException ex) 
         {
@@ -79,7 +77,7 @@ public class OpenWorldRoomExtension extends SFSExtension
         GlobalGameData.monsters = new ConcurrentHashMap<Integer, MonsterClass>();
         GlobalGameData.bullets = new ConcurrentHashMap<Integer, BulletClass>();
         GlobalGameData.towers = new ConcurrentHashMap<Integer, TowerClass>();
-        //GlobalGameData.loginNames = new ConcurrentHashMap<String, Integer>();
+        
         GlobalGameData.room = (MMORoom) this.getParentRoom();
         GlobalGameData.sfs = SmartFoxServer.getInstance();
         GlobalGameData.api = getApi();
@@ -94,5 +92,6 @@ public class OpenWorldRoomExtension extends SFSExtension
         killsNotificator.cancel(true);
         towerMonsterResurectorTask.cancel(true);
         towerAtackerTask.cancel(true);
+        filterLoggedUsersTask.cancel(true);
     }
 }

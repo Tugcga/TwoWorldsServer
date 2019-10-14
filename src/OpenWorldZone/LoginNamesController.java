@@ -1,7 +1,11 @@
 package OpenWorldZone;
 
 import Game.DataClasses.GlobalGameData;
-import OpenWorldRoom.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginNamesController 
 {
@@ -9,42 +13,103 @@ public class LoginNamesController
     {
         if(GlobalGameData.loginNames.containsKey(name))
         {
-            int namesCount = GlobalGameData.loginNames.get(name);
-            GlobalGameData.loginNames.replace(name, namesCount + 1);
-            return name + "#" + (namesCount + 1);
+            List<Integer> nameIndexes = GlobalGameData.loginNames.get(name);
+            //find the first free index for the name
+            Integer newIndex = nameIndexes.size() + 1;
+            for(Integer i = 1; i < nameIndexes.size() + 2; i++)
+            {
+                if(!nameIndexes.contains(i))
+                {
+                    newIndex = i;
+                    i = nameIndexes.size() + 1;
+                }
+            }
+            nameIndexes.add(newIndex);
+            GlobalGameData.loginNames.replace(name, nameIndexes);
+            if(newIndex > 1)
+            {
+                return name + "#" + newIndex;
+            }
+            else
+            {
+                return name;
+            }
         }
         else
         {
-            GlobalGameData.loginNames.put(name, 1);
+            List<Integer> newIndexes = new ArrayList<>();
+            newIndexes.add(1);
+            GlobalGameData.loginNames.put(name, newIndexes);
             return name;
         }
     }
     
-    public static void RemoveLoginName(String name)
+    static String NameToName(String name)
     {
         int i = name.indexOf("#");
-        String toDelete = name;
+        String toReturn = name;
         if(i > 0)
         {
-            toDelete = name.substring(0, i);
+            toReturn = name.substring(0, i);
         }
+        return toReturn;
+    }
+    
+    static Integer NameToIndex(String name)
+    {
+        int i = name.indexOf("#");
+        Integer toReturn = 1;
+        if(i > 0)
+        {
+            toReturn = Integer.parseInt(name.substring(i + 1, name.length()));
+        }
+        return toReturn;
+    }
+    
+    public static void RemoveLoginName(String name)
+    {
+        String toDelete = NameToName(name);
+        Integer nameIndex = NameToIndex(name);
         if(GlobalGameData.loginNames.containsKey(toDelete))
         {
-            int namesCount = GlobalGameData.loginNames.get(toDelete);
-            //Logger.Log("Name " + name + " exist with count = " + namesCount);
-            if(namesCount <= 1)
-            {
-                GlobalGameData.loginNames.remove(toDelete);
+            List<Integer> nameIndexes = GlobalGameData.loginNames.get(toDelete);
+            if(name.equals(toDelete) || nameIndexes.size() == 1)
+            {//the name has only one index 1
+                GlobalGameData.loginNames.remove(name);
             }
             else
             {
-                GlobalGameData.loginNames.replace(toDelete, namesCount - 1);
+                nameIndexes.remove(nameIndex);
             }
         }
         else
         {
             
         }
+    }
+    
+    public static void FilterLoggedUsers(ArrayList<String> names, OpenWorldZoneExtension zone)
+    {
+        //we should count all names with the same prefix
+        Map<String, List<Integer>> namesCount = new ConcurrentHashMap<String, List<Integer>>();
+        for(String name : names)
+        {
+            String prefix = NameToName(name);
+            Integer index = NameToIndex(name);
+            if(namesCount.containsKey(prefix))
+            {
+                namesCount.get(prefix).add(index);
+            }
+            else
+            {
+                List<Integer> newIndexes = new ArrayList<Integer>();
+                newIndexes.add(index);
+                namesCount.put(prefix, newIndexes);
+            }
+        }
+        //next set values in the GlobalGameData.loginNames
+        GlobalGameData.loginNames.clear();
+        GlobalGameData.loginNames.putAll(namesCount);
     }
     
     public static String FilterName(String name)

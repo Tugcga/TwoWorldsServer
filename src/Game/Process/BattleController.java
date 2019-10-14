@@ -29,6 +29,7 @@ public class BattleController
                     player.StartBlockTime();//если игрок умер, то блокируем его передвижение на какое-то время. Потом оживляем (это выполняется в таске)
                 }
                 hitData.AddData(0, targetId, player.GetLife(), player.GetMaxLife(), player.GetIsDead(), player.GetBlockTime(), player.GetPosition());
+                NetworkDataProcess.SetPlayerState(player, false, false);
             }
         }
         else if(targetType == 1)
@@ -47,6 +48,7 @@ public class BattleController
                     monster.AddDamageData(atackerType, atackerId, damage);
                 }
                 hitData.AddData(1, targetId, monster.GetLife(), monster.GetMaxLife(), monster.GetIsDead(), 0, monster.GetPosition());
+                NetworkDataProcess.SetMonsterState(monster, false, false);
             }
         }
         else if(targetType == 2)

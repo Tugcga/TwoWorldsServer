@@ -1,7 +1,5 @@
-
 package Game.DataClasses;
 
-import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.mmo.Vec3D;
 
 public class Vector2 

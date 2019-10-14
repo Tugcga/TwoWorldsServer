@@ -50,6 +50,8 @@ public class ConfigDataClass
     public int GetTowerResurectMonsterTime() {return towerResurectMonsterTime;}
     int towerAtackTickTime;
     public int GetTowerAtackTickTime() {return towerAtackTickTime;}
+    int filterLoggedUserNamesTime;
+    public int GetFilterLoggedUserNamesTime() {return filterLoggedUserNamesTime;}
         
     public ConfigDataClass(String fileName) throws IOException
     {
@@ -98,6 +100,7 @@ public class ConfigDataClass
         //playerMovementDeltaWallDistance = serverParams.getFloat("playerMovementDeltaWallDistance");
         towerResurectMonsterTime = serverParams.getInt("towerResurectMonsterTime");
         towerAtackTickTime = serverParams.getInt("towerAtackTickTime");
+        filterLoggedUserNamesTime = serverParams.getInt("filterLoggedUserNamesTime");
     }
     
     private void SetBulletsParams(ISFSArray bulletsParams)

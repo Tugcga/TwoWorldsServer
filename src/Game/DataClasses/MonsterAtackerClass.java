@@ -121,7 +121,7 @@ public class MonsterAtackerClass
                 BulletHitDataClass hitData = new BulletHitDataClass();
                 BattleController.ApplyDamage(targetType, targetId, 1, myPerson.GetId(), damage, hitData);
                 Vector2 atackPoint = GetAtackPoint();
-                NetworkDataProcess.SayClientAtackResult(false, -1, atackPoint.GetX(), atackPoint.GetY(), hitData);
+                NetworkDataProcess.SayClientAtackResult(false, -1, -1, atackPoint.GetX(), atackPoint.GetY(), hitData);
             }
         }
     }

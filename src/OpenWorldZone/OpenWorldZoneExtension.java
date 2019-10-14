@@ -9,6 +9,7 @@ import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.extensions.SFSExtension;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public class OpenWorldZoneExtension extends SFSExtension
     {
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
-        GlobalGameData.loginNames = new ConcurrentHashMap<String, Integer>();
+        GlobalGameData.loginNames = new ConcurrentHashMap<String, List<Integer>>();
         
         addEventHandler(SFSEventType.SERVER_READY, Handler_ServerReady.class);
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
@@ -67,12 +68,6 @@ public class OpenWorldZoneExtension extends SFSExtension
         ISystemFilterChain messageChain = new SysControllerFilterChain();
         messageChain.addFilter("public_message", new Filter_PublicMessage());
         getParentZone().setFilterChain(SystemRequest.PublicMessage, messageChain);
-        
-        //additional system 
-        //Handshake, Login, Logout, GetRoomList, AutoJoin, GenericMessage, ChangeRoomName, ChangeRoomPassword,
-        //CallExtension, SpectatorToPlayer, PlayerToSpectator, ChangeRoomCapacity,  ManualDisconnection, FindRooms,
-        //FindUsers, PingPong, InitBuddyList, GoOnline, CreateSFSGame, GetLobbyNode, KeepAlive, QuickJoin, OnEnterRoom, 
-        //OnRoomCountChange, OnUserLost, OnRoomLost, OnUserExitRoom, OnClientDisconnection, OnReconnectionFailure, OnMMOItemVariablesUpdate, OnJoinAppNode
     }
     
     @Override
@@ -109,6 +104,16 @@ public class OpenWorldZoneExtension extends SFSExtension
         {
             String name = (String)params;
             LoginNamesController.RemoveLoginName(name);
+        }
+        else if(cmdName.equals("FilterLoggedUsers"))
+        {
+            List<User> users = (List<User>) params;
+            ArrayList<String> names = new ArrayList<String>();
+            for(User u : users)
+            {
+                names.add(u.getName());
+            }
+            LoginNamesController.FilterLoggedUsers(names, this);
         }
         return null;
     }
@@ -162,27 +167,4 @@ public class OpenWorldZoneExtension extends SFSExtension
         }
         return roomNames;
     }
-    
-    /*void InitServerConfig()
-    {//call at startup or when any would like to get this data
-        try 
-        {
-            serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
-            isServerInit = true;
-        } 
-        catch (IOException ex) 
-        {
-            isServerInit = false;
-            Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
-    
-    /*public ConfigDataClass GetServerConfig()
-    {//called at LoginEventHandler when client connect and ask models
-        if(!isServerInit)
-        {
-            InitServerConfig();
-        }
-        return serverConfig;
-    }*/
 }

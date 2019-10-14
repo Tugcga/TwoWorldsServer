@@ -7,6 +7,7 @@ import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.api.ISFSApi;
 import com.smartfoxserver.v2.api.ISFSMMOApi;
 import com.smartfoxserver.v2.mmo.MMORoom;
+import java.util.List;
 import java.util.Map;
 
 public class GlobalGameData 
@@ -26,5 +27,5 @@ public class GlobalGameData
     public static Map<Integer, BulletClass> bullets;
     public static Map<Integer, TowerClass> towers;
     
-    public static Map<String, Integer> loginNames;  // store here login user names and count the count of these names
+    public static Map<String, List<Integer>> loginNames;  // store here login user names and count the count of these names
 }

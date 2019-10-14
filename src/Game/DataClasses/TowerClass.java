@@ -25,7 +25,7 @@ public class TowerClass extends PersonClass
     
     public TowerClass(MMOItem towerLink, int tType, String towerName, float radius, int life, int mCount, 
             float mMinRadius, float mMaxRadius, float atackRadius, float atackCD, int bulletType,
-            float accRadius, long resurectTime, boolean tIsSpawnInDead, boolean tIsAgreMonsterToAtacker, int bPerShot)
+            float accRadius, long resurectTime, boolean tIsSpawnInDead, boolean tIsAgreMonsterToAtacker, int bPerShot, int shotBDelay)
     {
         super(towerLink.getId(), towerName, 0, radius, life);
         tower = towerLink;
@@ -33,7 +33,7 @@ public class TowerClass extends PersonClass
         isSpawnMonsterInDead = tIsSpawnInDead;
         isAgreMonsterToAtacker = tIsAgreMonsterToAtacker;
         monsterSpawner = new TowerMonsterSpawnerClass(this.GetId(), mCount, mMinRadius, mMaxRadius);
-        atacker = new TowerAtackerClass(this, atackRadius, atackCD, bulletType, accRadius, bPerShot);
+        atacker = new TowerAtackerClass(this, atackRadius, atackCD, bulletType, accRadius, bPerShot, shotBDelay);
         
         isDeadInit = false;
         actualDeadTime = resurectTime;

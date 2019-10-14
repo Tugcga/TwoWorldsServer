@@ -60,7 +60,7 @@ public class TowersManagement
                                             tParams.GetAtackCoolDawn(), tParams.GetBulletType(),
                                             tParams.GetTargetAccuracyRadius(), tParams.GetResurectTime(),
                                             tParams.GetIsSpawnInDead(), tParams.GetIsAgreMonstersToAtacker(),
-                                            tParams.GetBulletsPerShot());
+                                            tParams.GetBulletsPerShot(), tParams.GetShotBulletsDelay());
         newTower.SetLocation(towerLocation);
         newTowerItem.setVariables(GetTowerVariables(newTower, true));
         

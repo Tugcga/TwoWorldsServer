@@ -37,6 +37,8 @@ public class TowerParametersClass
     public boolean GetIsAgreMonstersToAtacker() {return isAgreMonstersToAtacker;}
     int bulletsPerShot;
     public int GetBulletsPerShot() {return bulletsPerShot;}
+    int shotBulletsDelay;  // in milliseconds
+    public int GetShotBulletsDelay() {return shotBulletsDelay;}
     
     public TowerParametersClass(ISFSObject towerParams)
     {
@@ -54,5 +56,6 @@ public class TowerParametersClass
         isSpawnInDead = towerParams.getInt("isSpawnInDead") == 1 ? true : false;
         isAgreMonstersToAtacker = towerParams.getInt("isAgreMonsterToAtacker") == 1 ? true : false;
         bulletsPerShot = towerParams.getInt("bulletsPerShot");
+        shotBulletsDelay = towerParams.getInt("shotBulletsDelay");
     }
 }

@@ -85,7 +85,7 @@ public class CollisionDataClass
                     toReturn.intersectedEdgeIndex = innerEdge.myIndex;
                     toReturn.parameter = innerT;
                 }
-            } 
+            }
         }
         if(toReturn.isIntersection)
         {

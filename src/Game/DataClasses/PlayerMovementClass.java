@@ -128,37 +128,22 @@ public class PlayerMovementClass
             float deltaTime = (float)(System.currentTimeMillis() - lastTickTime) / 1000f;
             Vector2 currentPosition = parent.GetPosition();
             Vector2 newPosition = new Vector2(currentPosition.GetX() + moveSpeed * deltaTime * direction.GetX(), currentPosition.GetY() + moveSpeed * deltaTime * direction.GetY());
-            /*parent.GetLocation().SetPosition(newPosition);
-            //check we finish to destination position
-            if(Vector2.Dot(direction, Vector2.Subtract(destinationData.point, parent.GetPosition())) < 0)
-            {//Update destination point
-                if(destinationData.isLastPoint)
-                {
-                    isMove = false;
-                    dirIndex = -1;
-                }
-                else
-                {
-                    destinationData = GetDestinationPoint();
-                    isMove = destinationData.isMoveble;
-                    if(isMove == false)
-                    {
-                        dirIndex = -1;
-                    }
-                }
-                isStateNew = true; //здесь по сути говорим обновить полжение на всех клиентах. Когда дошли до промежуточной точки
-            }*/
+            
             //check intersection with the wall
             EdgeClass walkPath = new EdgeClass(currentPosition, newPosition);        
+            //create an esge slightly bigger than from start to end
+            //Vector2 dirShift = Vector2.MultiplyByScalar(direction, GlobalGameData.serverConfig.GetPlayerMovementDeltaWallDistance());
+            //EdgeClass walkPath = new EdgeClass(Vector2.Subtract(currentPosition, dirShift), Vector2.Add(newPosition, dirShift));
             IntersectionResultClass walkPathIntersection = GlobalGameData.collisionMap.GetIntersection(walkPath);
-            if(walkPathIntersection.isIntersection)
+            //if we obtain intersection, we should confirm that this intersection pont not in the negative direction
+            if(walkPathIntersection.isIntersection/* && 
+               Vector2.Dot(direction, Vector2.Subtract(walkPathIntersection.intersectionPoint, currentPosition)) > 0 &&
+               Vector2.GetDistance(currentPosition, walkPathIntersection.intersectionPoint) < Vector2.GetDistance(currentPosition, newPosition)*/)
             {
                 CollisionEdgeClass wall = GlobalGameData.collisionMap.GetEdge(walkPathIntersection.intersectedEdgeIndex);
                 //Check we in positive side
                 if(wall.IsPointOnPositiveSide(currentPosition))
                 {
-                    //GlobalGameData.server.trace(walkPath.direction + " : " + wall.direction + " : " + wall.normal);
-                    double dot = Vector2.Dot(wall.normal, walkPath.direction);
                     Vector2 normalShift = Vector2.MultiplyByScalar(wall.normal, -1 * Vector2.Dot(wall.normal, walkPath.direction));
                     Vector2 newPositionShift = Vector2.Add(newPosition, normalShift);
                     //if shifted position too close to original position, then we collide with horizontal or vertical wall, stop here
@@ -186,18 +171,6 @@ public class PlayerMovementClass
                             parent.GetLocation().SetPosition(newPositionShift);
                         }
                     }
-                    //Check is we inside the delta layer of the wall
-                    /*if(wall.GetDistance(parent.GetPosition()) < deltaWall)
-                    {//we inside, stop moving
-                        toReturn.isMoveble = false;
-                    }
-                    else
-                    {
-                        //we near the wall. Calculate detination point in 0.5 of layer thickness
-                        toReturn.point = Vector2.Add(walkPathIntersection.intersectionPoint, Vector2.MultiplyByScalar(wall.GetNormal(), 0.5 * deltaWall));
-                        toReturn.isMoveble = true;
-                        toReturn.isLastPoint = true;
-                    }*/
                 }
                 else
                 {//we inside the wall. Move freely
