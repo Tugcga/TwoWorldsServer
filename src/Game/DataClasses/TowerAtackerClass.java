@@ -177,7 +177,7 @@ public class TowerAtackerClass
     void StartAtack(Vector2 startPoint, Vector2 targetPoint)
     {//0 - player, 1 - monster
         //Vector2 startPoint, Vector2 targetPoint, int bulletType, PersonClass hostPerson, IntersectionResultClass intersectionData, int hostType
-        MonstersManagement.AddBullet(startPoint, targetPoint, bulletType, towerPerson, new IntersectionResultClass(), 2);
+        MonstersManagement.AddBullet(startPoint, targetPoint, bulletType, towerPerson, new IntersectionResultClass(), 2, 0.0f);
         lastAtackTime = System.currentTimeMillis();
     }
     

@@ -45,8 +45,8 @@ public class MonstersManagement
         return newMonster.GetId();
     }
     
-    public static void AddBullet(Vector2 startPoint, Vector2 targetPoint, int bulletType, PersonClass hostPerson, IntersectionResultClass intersectionData, int hostType)
-    {
+    public static void AddBullet(Vector2 startPoint, Vector2 targetPoint, int bulletType, PersonClass hostPerson, IntersectionResultClass intersectionData, int hostType, float playerAngle)
+    {//player angle for players (for tower it is zero) and used only for line-bullet
         BulletParametersClass bulletParams = GlobalGameData.serverConfig.GetBulletParameters(bulletType);
         MMOItem newBulletItem = new MMOItem();
         Vector2 targetPosition = new Vector2();
@@ -55,9 +55,11 @@ public class MonstersManagement
         {//traceble bullet (rocket or line bullet)
             if(!bulletParams.IsDamageOnlyTarget())
             {//line bullet, check collisions with walls and enemies
-                Vector2 toVectore = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
-                toVectore.Normalize();
-                targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVectore.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVectore.GetY());
+                //Vector2 toVector = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
+                //toVector.Normalize();
+                //playerAngle in radians and calculated from positive x-direction 
+                Vector2 toVector = bulletType == 0 && hostType == 0 ? new Vector2(Math.cos(playerAngle), Math.sin(playerAngle)) : new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
+                targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVector.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVector.GetY());
                 if(intersectionData.isIntersection)
                 {//may be we need to change target position
                     if(bulletParams.GetMaxDistance() > Vector2.GetDistance(startPoint, intersectionData.intersectionPoint))

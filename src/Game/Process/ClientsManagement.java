@@ -105,20 +105,6 @@ public class ClientsManagement
             IntersectionResultClass collisionResult = GlobalGameData.collisionMap.GetIntersection(bulletEdge);
             int bulletType = player.GetModelIndex();
             boolean isBulletEffectTarget = GlobalGameData.serverConfig.GetBulletParameters(bulletType).IsDamageOnlyTarget();
-            /*if(!isBulletEffectTarget || (isBulletEffectTarget && !collisionResult.isIntersection))
-            {//there are no intersections and bullet damage only target point or bullet is line-damager
-                if(!player.GetIsDead() && player.GetFireController().TryStartbullet())
-                {
-                    MonstersManagement.AddBullet(player.GetPosition(), cursorPosition, bulletType, player, collisionResult, 0);
-                }
-            }
-            else
-            {
-                if(isBulletEffectTarget && collisionResult.isIntersection)
-                {//Notify client that target is invisible
-                    NetworkDataProcess.SendClientResponse(player.GetUser(), 0);
-                }
-            }*/
             if(!player.GetIsDead() && player.GetFireController().TryStartbullet())
             {
                 //recalculate cursor point
@@ -126,7 +112,7 @@ public class ClientsManagement
                 {
                     cursorPosition = collisionResult.intersectionPoint;
                 }
-                MonstersManagement.AddBullet(player.GetPosition(), cursorPosition, bulletType, player, collisionResult, 0);
+                MonstersManagement.AddBullet(player.GetPosition(), cursorPosition, bulletType, player, collisionResult, 0, angle);
             }
         }
     }
