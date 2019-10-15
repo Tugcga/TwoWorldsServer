@@ -15,7 +15,7 @@ public class Filter_PublicMessage extends SysControllerFilter
         String message = params.getUtfString(GenericMessage.KEY_MESSAGE);
         
         //filter message by alphabetical symbols
-        String filterMessage = message.replaceAll("[^A-Za-z0-9А-ЯЁа-яё -()*+/.,#%^:;{}!?]", "");
+        String filterMessage = message.replaceAll("[^A-Za-z0-9А-ЯЁа-яё \\(\\)\\*\\/\\.\\,\\#\\%\\^\\:\\;\\!\\?\\{\\}\\-\\+\\@\\$\\^\\&_\\=\\{\\}]", "");
         if(filterMessage.length() > 0)
         {
             // Store new message in parameters list 
