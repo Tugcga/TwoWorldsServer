@@ -1,6 +1,9 @@
 package OpenWorldZone;
 
+import Game.DataClasses.ChatMessagesStore;
 import Game.DataClasses.GlobalGameData;
+import Game.Process.FilterLoggedUsersTask;
+import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.controllers.SystemRequest;
 import com.smartfoxserver.v2.controllers.filter.ISystemFilterChain;
 import com.smartfoxserver.v2.controllers.filter.SysControllerFilterChain;
@@ -9,13 +12,20 @@ import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.extensions.SFSExtension;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class OpenWorldZoneExtension extends SFSExtension
 {
+    private ScheduledFuture<?> saveChatTask;
     Map<Integer, Integer> userModelIndexes;  // this map used in RoomExtension for creating player, key - sessionId, but not UserId
     List<Room> roomList;
     SFSArray roomNames;
@@ -29,6 +39,14 @@ public class OpenWorldZoneExtension extends SFSExtension
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
         GlobalGameData.loginNames = new ConcurrentHashMap<String, List<Integer>>();
+        GlobalGameData.chatMessages = new ConcurrentLinkedQueue<String>();
+        try 
+        {
+            ChatMessagesStore.Init(this.getCurrentFolder() + "chatStore_config.json");
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         addEventHandler(SFSEventType.SERVER_READY, Handler_ServerReady.class);
         addEventHandler(SFSEventType.USER_JOIN_ZONE, Handler_UserJoinZone.class);
@@ -68,11 +86,21 @@ public class OpenWorldZoneExtension extends SFSExtension
         ISystemFilterChain messageChain = new SysControllerFilterChain();
         messageChain.addFilter("public_message", new Filter_PublicMessage());
         getParentZone().setFilterChain(SystemRequest.PublicMessage, messageChain);
+        
+        saveChatTask = SmartFoxServer.getInstance().getTaskScheduler().scheduleAtFixedRate(new SaveChatTask(), ChatMessagesStore.saveInterval, ChatMessagesStore.saveInterval, TimeUnit.SECONDS);
     }
     
     @Override
     public void destroy()
     {
+        try 
+        {
+            ChatMessagesStore.SaveMessages();
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        saveChatTask.cancel(true);
         super.destroy();
     }
     

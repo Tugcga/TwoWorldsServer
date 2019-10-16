@@ -1,6 +1,7 @@
 package OpenWorldRoom;
 
 import Game.DataClasses.BulletClass;
+import Game.DataClasses.ChatMessagesStore;
 import Game.DataClasses.CollisionDataClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
@@ -39,13 +40,13 @@ public class OpenWorldRoomExtension extends SFSExtension
     {
         try 
         {
-            trace("Init room " + getParentRoom().getName());
             //Inside room extension server config data used more frequently and this extension init earlie than zone extension
             GlobalGameData.serverConfig = new ConfigDataClass(this.getCurrentFolder() + "config.json");
             GlobalGameData.startPoints = new StartPointsClass(this.getCurrentFolder() + "PlayerStartPoints.txt");
             InitGameData();
             GlobalGameData.collisionMap = new CollisionDataClass(this.getCurrentFolder() + "CollisionMap.txt");
             TowersManagement.CreateTowers(this.getCurrentFolder() + "Towers.txt");
+            
             //lagSimulationMillis = 2000;
 
             // Register handler for user join/leave room events
