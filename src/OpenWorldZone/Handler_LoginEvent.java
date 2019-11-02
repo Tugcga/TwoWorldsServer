@@ -44,7 +44,7 @@ public class Handler_LoginEvent extends BaseServerEventHandler
             if(((OpenWorldZoneExtension) this.getParentExtension()).GetRoomNames().size() > 0)
             {
                 //here we save data about logn model_index
-                if(inData.containsKey("model_index"))
+                if(inData != null && inData.containsKey("model_index"))
                 {
                     String newName = LoginNamesController.AddLoginName(userName);
                     outData.putUtfString(SFSConstants.NEW_LOGIN_NAME, newName);
