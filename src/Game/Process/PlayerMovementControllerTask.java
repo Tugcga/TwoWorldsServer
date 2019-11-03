@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.Process;
 
 import Game.DataClasses.GlobalGameData;
@@ -13,10 +8,6 @@ import com.smartfoxserver.v2.exceptions.ExceptionMessageComposer;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- *
- * @author Philipp
- */
 public class PlayerMovementControllerTask implements Runnable
 {
     @Override
@@ -60,7 +51,6 @@ public class PlayerMovementControllerTask implements Runnable
         }
         catch (Exception e)
         {
-            // In case of exceptions this try-catch prevents the task to stop running
             ExceptionMessageComposer emc = new ExceptionMessageComposer(e);
             Logger.Log(emc.toString());
         }

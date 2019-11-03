@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.Process;
 
 import Game.DataClasses.GlobalGameData;
@@ -11,8 +6,6 @@ import Game.DataClasses.NetworkKeys;
 import Game.DataClasses.TowerClass;
 import Game.DataClasses.TowerParametersClass;
 import Game.DataClasses.Vector2;
-import OpenWorldRoom.Logger;
-import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.mmo.IMMOItemVariable;
 import com.smartfoxserver.v2.mmo.MMOItem;
 import com.smartfoxserver.v2.mmo.MMOItemVariable;
@@ -70,7 +63,7 @@ public class TowersManagement
     
     public static List<IMMOItemVariable> GetTowerVariables(TowerClass tower, boolean isFirstCall) 
     {
-        List<IMMOItemVariable> vars = new ArrayList<IMMOItemVariable>();
+        List<IMMOItemVariable> vars = new ArrayList<>();
         if(isFirstCall)
         {
             vars.add(new MMOItemVariable(NetworkKeys.key_id, tower.GetId()));

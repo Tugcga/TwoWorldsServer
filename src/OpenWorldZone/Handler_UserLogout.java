@@ -17,7 +17,6 @@ public class Handler_UserLogout extends BaseServerEventHandler
         //List<Room> rooms = (List<Room>) event.getParameter(SFSEventParam.JOINED_ROOMS);
         //Map<Room, Integer> playerIds = (Map<Room, Integer>) event.getParameter(SFSEventParam.PLAYER_IDS_BY_ROOM);
         
-        trace("User: " + user + " from zone: " + zone + " logout");
         //delete userData
         ((OpenWorldZoneExtension)getParentExtension()).RemoveUserData(user.getSession().getId());
     }

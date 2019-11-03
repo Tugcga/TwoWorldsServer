@@ -77,7 +77,7 @@ public class BulletClass extends PersonClass
         List<BaseMMOItem> mmoItems = GlobalGameData.room.getProximityItems(pos);
         List<User> users = GlobalGameData.room.getProximityList(pos);
 
-        List<IntIntFloatClass> collisions = new ArrayList<IntIntFloatClass>();
+        List<IntIntFloatClass> collisions = new ArrayList<>();
         for(BaseMMOItem item : mmoItems)
         {
             int itemId = item.getId();
@@ -147,7 +147,7 @@ public class BulletClass extends PersonClass
                     }
                 }
                 state.UpShouldDestroy();
-                List<IntIntFloatClass> toCalculate = new ArrayList<IntIntFloatClass>();
+                List<IntIntFloatClass> toCalculate = new ArrayList<>();
                 toCalculate.add(collisions.get(closestIndex));
                 CalculateDamage(toCalculate);
             }
@@ -199,12 +199,7 @@ public class BulletClass extends PersonClass
     {
         return state;
     }
-    
-    /*public int GetMMOItemType()
-    {
-        return mmoItemType;
-    }*/
-    
+        
     public int GetHostType()
     {
         return hostType;
@@ -222,7 +217,6 @@ public class BulletClass extends PersonClass
     
     public int GetHostId()
     {
-        //return hostPerson.GetId();
         return hostId;
     }
     

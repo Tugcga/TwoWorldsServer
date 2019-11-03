@@ -41,7 +41,7 @@ public class PlayerClass extends PersonClass
             killsStat.WriteKillPlayer();
         }
         else if(targetType == 1)
-        {//I kill mosnter
+        {//I kill the monster
             killsStat.WriteKillMonster();
         }
         else if(targetType == 2)

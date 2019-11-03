@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import Game.Process.MonstersManagement;
 import com.smartfoxserver.v2.entities.User;
-import com.smartfoxserver.v2.mmo.BaseMMOItem;
 import com.smartfoxserver.v2.mmo.Vec3D;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +85,7 @@ public class TowerAtackerClass
         Vec3D pos = towerPerson.GetPosition3D();
         Vector2 towerPosition = towerPerson.GetPosition();
         List<User> users = GlobalGameData.room.getProximityList(pos);//<--- players
-        List<Integer> userList = new ArrayList<Integer>();//list of all user in atack area
+        List<Integer> userList = new ArrayList<>();//list of all user in atack area
         for(User user : users)
         {
             int userId = user.getId();
@@ -135,7 +129,6 @@ public class TowerAtackerClass
             //Find players on the radius
             Vec3D pos = towerPerson.GetPosition3D();
             Vector2 towerPosition = towerPerson.GetPosition();
-            //List<BaseMMOItem> mmoItems = GlobalGameData.room.getProximityItems(pos);//<-- monsters and towers
             List<User> users = GlobalGameData.room.getProximityList(pos);//<--- players
             List<Integer> userList = new ArrayList<Integer>();//list of all user in atack area
             for(User user : users)

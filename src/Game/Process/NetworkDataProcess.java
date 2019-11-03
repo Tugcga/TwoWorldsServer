@@ -74,8 +74,6 @@ public class NetworkDataProcess
             monster.GetState().SetStateToIddle();
             monster.GetState().SetPosition(new Vector2(monster.GetLastCorrectPosition()));
             monster.ApplyDamage(monster.GetMaxLife());
-            //ExceptionMessageComposer emc = new ExceptionMessageComposer(e);
-            //Logger.Log(emc.toString());
             Logger.Log("Monster " + monster.GetId() + " out of map limit. Kill him.");
         }
     }
@@ -100,8 +98,6 @@ public class NetworkDataProcess
         {
             bullet.SetPosition(new Vector2(bullet.GetLastCorrectPosition()));
             bullet.SetForceDestroy();
-            //ExceptionMessageComposer emc = new ExceptionMessageComposer(e);
-            //Logger.Log(emc.toString());
             Logger.Log("Bullet " + bullet.GetId() + " out of map limit");
         }
     }
@@ -127,7 +123,6 @@ public class NetworkDataProcess
         
     public static void SayTowerResurect(TowerClass tower)
     {
-        //GlobalGameData.server.trace("Call tower resurect " + tower.GetId());
         List<User> users = GlobalGameData.room.getProximityList(tower.GetPosition3D());
         ISFSObject params = new SFSObject();
         params.putInt("id", tower.GetId());
@@ -140,17 +135,14 @@ public class NetworkDataProcess
     {//call when changing player movement state or resurect player
         List<User> users = GlobalGameData.room.getProximityList(player.GetPosition3D());
         users.add(player.GetUser());
-        //GlobalGameData.server.trace("Call client moving " + player.GetId());
         GlobalGameData.server.send("RPCClientUpdate", player.GetMinimalParameters(), users);
     }
         
     public static void SayMonsterChangeState(MonsterClass monster)
     {//called whenthe state of the monster is changed
-        
         List<User> users = GlobalGameData.room.getProximityList(monster.GetPosition3D());
         if(users.size() > 0)
         {
-            //GlobalGameData.server.trace("Call monster change state " + monster.GetId());
             GlobalGameData.server.send("RPCMonsterChangeState", monster.GetMinimalParameters(), users);
         }
     }
@@ -217,7 +209,6 @@ public class NetworkDataProcess
             {
                 GlobalGameData.server.send("RPCMonsterDead", params, users);    
             }
-            
         }
     }
     

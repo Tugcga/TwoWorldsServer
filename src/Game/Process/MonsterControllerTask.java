@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.Process;
 
 import Game.DataClasses.BulletClass;
@@ -55,14 +50,14 @@ public class MonsterControllerTask implements Runnable
                 {
                     if(bullet.IsDelayOver())
                     {
-                        bullet.GetState().TaskTick();// просто передвигаем снаряд
+                        bullet.GetState().TaskTick();// move the bullet
                         if(!bullet.GetState().GetShouldDestroy())
                         {//до цели не долетели
-                            bullet.CheckCollisions();// проверяем, не столкнулись ли с кем
+                            bullet.CheckCollisions();
                         }
-                        if(bullet.GetState().GetShouldDestroy())//shouldDestoy поднимается, когда снаряд долетел до конечной точки. То есть кончился срок жизни или же с кем-то встретился
+                        if(bullet.GetState().GetShouldDestroy())//shouldDestoy is on if the bullet comes to the target
                         {
-                            if(bullet.IsEffectedOnlyEnd())// это rocket bullet, долетел до цели
+                            if(bullet.IsEffectedOnlyEnd())// rocket bullet come th the target
                             {
                                 bullet.CalculateDamage();
                             }
@@ -73,15 +68,12 @@ public class MonsterControllerTask implements Runnable
                         {
                             NetworkDataProcess.SetBulletState(bullet, bullet.GetState().IsStateNew(), false);
                         }
-                    }
-                    
+                    }   
                 }
-                
             }
         }
         catch (Exception e)
         {
-            // In case of exceptions this try-catch prevents the task to stop running
             ExceptionMessageComposer emc = new ExceptionMessageComposer(e);
             Logger.Log(emc.toString());
         }

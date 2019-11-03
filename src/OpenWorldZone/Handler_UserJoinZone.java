@@ -5,7 +5,6 @@ import com.smartfoxserver.v2.core.SFSEventParam;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.Zone;
-import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.exceptions.SFSException;
 import com.smartfoxserver.v2.extensions.BaseServerEventHandler;
 import java.util.List;
@@ -17,9 +16,6 @@ public class Handler_UserJoinZone extends BaseServerEventHandler
     {
         User user = (User)event.getParameter(SFSEventParam.USER);
         Zone zone = (Zone)event.getParameter(SFSEventParam.ZONE);
-        
-        trace("User: " + user + " connect to zone: " + zone);
-        
         //and here we can automaticaly join to the room
         List<Room> rooms = ((OpenWorldZoneExtension) getParentExtension()).GetRooms();
         if(rooms.size() > 0)

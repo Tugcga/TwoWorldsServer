@@ -2,7 +2,6 @@ package OpenWorldZone;
 
 import Game.DataClasses.GlobalGameData;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,8 +90,8 @@ public class LoginNamesController
     public static void FilterLoggedUsers(ArrayList<String> names, OpenWorldZoneExtension zone)
     {
         //we should count all names with the same prefix
-        Map<String, List<Integer>> namesCount = new ConcurrentHashMap<String, List<Integer>>();
-        for(String name : names)
+        Map<String, List<Integer>> namesCount = new ConcurrentHashMap<>();
+        names.forEach((name) -> 
         {
             String prefix = NameToName(name);
             Integer index = NameToIndex(name);
@@ -102,11 +101,11 @@ public class LoginNamesController
             }
             else
             {
-                List<Integer> newIndexes = new ArrayList<Integer>();
+                List<Integer> newIndexes = new ArrayList<>();
                 newIndexes.add(index);
                 namesCount.put(prefix, newIndexes);
             }
-        }
+        });
         //next set values in the GlobalGameData.loginNames
         GlobalGameData.loginNames.clear();
         GlobalGameData.loginNames.putAll(namesCount);

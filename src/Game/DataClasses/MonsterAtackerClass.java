@@ -50,7 +50,7 @@ public class MonsterAtackerClass
     public void AtackTick()
     {
         if(isWaitEndAtack)
-        {// damage process, wait the end
+        {//damage process, wait the end
             if(System.currentTimeMillis() - atackStartTime > atackLengthTime)
             {
                 FinishAtack();

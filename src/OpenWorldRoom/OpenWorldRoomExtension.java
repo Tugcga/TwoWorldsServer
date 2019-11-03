@@ -1,7 +1,6 @@
 package OpenWorldRoom;
 
 import Game.DataClasses.BulletClass;
-import Game.DataClasses.ChatMessagesStore;
 import Game.DataClasses.CollisionDataClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
@@ -46,8 +45,6 @@ public class OpenWorldRoomExtension extends SFSExtension
             InitGameData();
             GlobalGameData.collisionMap = new CollisionDataClass(this.getCurrentFolder() + "CollisionMap.txt");
             TowersManagement.CreateTowers(this.getCurrentFolder() + "Towers.txt");
-            
-            //lagSimulationMillis = 2000;
 
             // Register handler for user join/leave room events
             addEventHandler(SFSEventType.USER_JOIN_ROOM, UserJoinRoomEventHandler.class);

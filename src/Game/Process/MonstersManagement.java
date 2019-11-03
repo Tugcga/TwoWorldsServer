@@ -31,7 +31,7 @@ public class MonstersManagement
         mLocation.SetPosition(position);
         
         MMOItem newMonsterItem = new MMOItem();
-        MonsterClass newMonster = new MonsterClass(newMonsterItem, monsterParams.GetMonsterSpeed(), 
+        MonsterClass newMonster = new MonsterClass(newMonsterItem, monsterParams.GetMonsterName(), monsterParams.GetMonsterSpeed(), 
                 monsterType, monsterParams.GetMonsterRadius(), 
                 monsterParams.GetMonsterLife(), hostTowerId,
                 monsterParams.GetMonsterDamage(), monsterParams.GetMonsterDamageRadius(),
@@ -55,8 +55,6 @@ public class MonstersManagement
         {//traceble bullet (rocket or line bullet)
             if(!bulletParams.IsDamageOnlyTarget())
             {//line bullet, check collisions with walls and enemies
-                //Vector2 toVector = new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
-                //toVector.Normalize();
                 //playerAngle in radians and calculated from positive x-direction 
                 Vector2 toVector = bulletType == 0 && hostType == 0 ? new Vector2(Math.cos(playerAngle), Math.sin(playerAngle)) : new Vector2(targetPoint.GetX() - startPoint.GetX(), targetPoint.GetY() - startPoint.GetY());
                 targetPosition.Set(startPoint.GetX() + bulletParams.GetMaxDistance() * toVector.GetX(), startPoint.GetY() + bulletParams.GetMaxDistance() * toVector.GetY());
@@ -170,7 +168,7 @@ public class MonstersManagement
     
     public static List<IMMOItemVariable> GetMonsterVariables(MonsterClass monster, boolean isFirstCall) 
     {
-        List<IMMOItemVariable> vars = new ArrayList<IMMOItemVariable>();
+        List<IMMOItemVariable> vars = new ArrayList<>();
         if(isFirstCall)
         {
             vars.add(new MMOItemVariable(NetworkKeys.key_id, monster.GetId()));
@@ -197,7 +195,7 @@ public class MonstersManagement
     
     public static List<IMMOItemVariable> GetBulletVariables(BulletClass bullet, boolean isFirstCall) 
     {
-        List<IMMOItemVariable> vars = new ArrayList<IMMOItemVariable>();
+        List<IMMOItemVariable> vars = new ArrayList<>();
         if(isFirstCall)
         {
             vars.add(new MMOItemVariable(NetworkKeys.key_id, bullet.GetId()));

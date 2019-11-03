@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
-
-import OpenWorldRoom.Logger;
 
 class DestinationPointData
 {
@@ -50,50 +43,6 @@ public class PlayerMovementClass
         direction = new Vector2(1, 0);
     }
     
-    /*DestinationPointData GetDestinationPoint()
-    {
-        DestinationPointData toReturn = new DestinationPointData();
-        toReturn.isMoveble = false;
-        toReturn.isLastPoint = true;
-        toReturn.point = Vector2.Add(parent.GetPosition(), Vector2.MultiplyByScalar(clientDirection, speed * rebuildDestTime));
-        EdgeClass walkPath = new EdgeClass(parent.GetPosition(), toReturn.point);        
-        IntersectionResultClass walkPathIntersection = GlobalGameData.collisionMap.GetIntersection(walkPath);
-        if(walkPathIntersection.isIntersection)
-        {
-            CollisionEdgeClass wall = GlobalGameData.collisionMap.GetEdge(walkPathIntersection.intersectedEdgeIndex);
-            //Check we in positive side
-            if(wall.IsPointOnPositiveSide(parent.GetPosition()))
-            {
-                //Check is we inside the delta layer of the wall
-                if(wall.GetDistance(parent.GetPosition()) < deltaWall)
-                {//we inside, stop moving
-                    toReturn.isMoveble = false;
-                }
-                else
-                {
-                    //we near the wall. Calculate detination point in 0.5 of layer thickness
-                    toReturn.point = Vector2.Add(walkPathIntersection.intersectionPoint, Vector2.MultiplyByScalar(wall.GetNormal(), 0.5 * deltaWall));
-                    toReturn.isMoveble = true;
-                    toReturn.isLastPoint = true;
-                }
-            }
-            else
-            {//we inside the wall. Move freely
-                toReturn.isMoveble = true;
-                toReturn.isLastPoint = false;
-            }
-        }
-        else
-        {//no intersection
-            toReturn.isMoveble = true;
-            toReturn.isLastPoint = false;
-        }
-        //Before return calculate direction
-        direction = Vector2.Subtract(toReturn.point, parent.GetPosition());
-        direction.Normalize();
-        return toReturn;
-    }*/
-    
     public void SetDirIndex(int newDI)
     {
         if(newDI != dirIndex)
@@ -101,14 +50,7 @@ public class PlayerMovementClass
             dirIndex = newDI;
             if(dirIndex >=0 && dirIndex <= 7)
             {
-                //clientDirection = Vector2.GetDirectionFromIndex(dirIndex);
                 direction = Vector2.GetDirectionFromIndex(dirIndex);
-                /*destinationData = GetDestinationPoint();
-                isMove = destinationData.isMoveble;
-                if(isMove == false)
-                {
-                    dirIndex = -1;
-                }*/
                 isMove = true;
                 isStateNew = true;
                 lastTickTime = System.currentTimeMillis();
@@ -132,13 +74,9 @@ public class PlayerMovementClass
             //check intersection with the wall
             EdgeClass walkPath = new EdgeClass(currentPosition, newPosition);        
             //create an esge slightly bigger than from start to end
-            //Vector2 dirShift = Vector2.MultiplyByScalar(direction, GlobalGameData.serverConfig.GetPlayerMovementDeltaWallDistance());
-            //EdgeClass walkPath = new EdgeClass(Vector2.Subtract(currentPosition, dirShift), Vector2.Add(newPosition, dirShift));
             IntersectionResultClass walkPathIntersection = GlobalGameData.collisionMap.GetIntersection(walkPath);
             //if we obtain intersection, we should confirm that this intersection pont not in the negative direction
-            if(walkPathIntersection.isIntersection/* && 
-               Vector2.Dot(direction, Vector2.Subtract(walkPathIntersection.intersectionPoint, currentPosition)) > 0 &&
-               Vector2.GetDistance(currentPosition, walkPathIntersection.intersectionPoint) < Vector2.GetDistance(currentPosition, newPosition)*/)
+            if(walkPathIntersection.isIntersection)
             {
                 CollisionEdgeClass wall = GlobalGameData.collisionMap.GetEdge(walkPathIntersection.intersectedEdgeIndex);
                 //Check we in positive side
@@ -215,7 +153,6 @@ public class PlayerMovementClass
     
     public float GetMoveAngle()
     {
-        //return (float)(Math.PI / 2 + dirIndex * Math.PI / 4);
         if(direction.GetX() > 0)
         {
             return (float)Math.asin(direction.GetY());

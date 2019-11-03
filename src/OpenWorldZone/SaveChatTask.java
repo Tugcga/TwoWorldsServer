@@ -3,6 +3,7 @@ package OpenWorldZone;
 import Game.DataClasses.ChatMessagesStore;
 import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.exceptions.ExceptionMessageComposer;
+import java.io.IOException;
 
 public class SaveChatTask implements Runnable
 {
@@ -13,7 +14,7 @@ public class SaveChatTask implements Runnable
         {
             ChatMessagesStore.SaveMessages();
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             // In case of exceptions this try-catch prevents the task to stop running
             ExceptionMessageComposer emc = new ExceptionMessageComposer(e);

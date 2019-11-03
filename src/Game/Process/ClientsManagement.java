@@ -8,19 +8,16 @@ import Game.DataClasses.NetworkKeys;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.PlayerModelParametersClass;
 import Game.DataClasses.Vector2;
-import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.plaf.metal.MetalBorders;
 
 public class ClientsManagement 
 {
     public static void ClientJoinToTheGame(User user)
     {
-        //int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getId());
         int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getSession().getId());
         if(userModelIndex != -1)  // -1 - invalid value
         {
@@ -28,7 +25,7 @@ public class ClientsManagement
             PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
                     userModelIndex, 
                     playerParams.GetCoolDawn(), playerParams.GetPlayerRadius(), playerParams.GetPlayerLife());
-            //newPlayer.GetLocation().SetRandomLocation(GlobalGameData.serverConfig.GetPlayerEmitRandomRadius());
+            
             newPlayer.GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
             GlobalGameData.clients.put(newPlayer.GetId(), newPlayer);
 
@@ -58,7 +55,7 @@ public class ClientsManagement
     
     public static List<UserVariable> GetClietnVariables(PlayerClass player, boolean isFirstCall)
     {
-        List<UserVariable> vars = new ArrayList<UserVariable>();
+        List<UserVariable> vars = new ArrayList<>();
         
         if(isFirstCall)
         {

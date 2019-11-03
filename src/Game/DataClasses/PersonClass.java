@@ -1,7 +1,5 @@
-
 package Game.DataClasses;
 
-import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.mmo.Vec3D;
 
 public class PersonClass 
@@ -65,7 +63,6 @@ public class PersonClass
         {
             return oldDead != isDead;
         }
-        //Logger.Log("Apply damage " + damage + " result is " + life + " " + isDead);
     }
     
     public int GetLife()

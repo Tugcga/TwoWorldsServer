@@ -1,6 +1,5 @@
 package Game.DataClasses;
 
-
 public class CollisionEdgeClass extends EdgeClass
 {
     public int myIndex;//index in collision map dictionary

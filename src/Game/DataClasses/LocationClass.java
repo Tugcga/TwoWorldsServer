@@ -1,7 +1,5 @@
 package Game.DataClasses;
 
-import OpenWorldRoom.Logger;
-
 public class LocationClass 
 {
     Vector2 position;

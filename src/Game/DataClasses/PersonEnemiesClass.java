@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import java.util.Iterator;
@@ -15,27 +10,8 @@ public class PersonEnemiesClass
     
     public PersonEnemiesClass()
     {
-        playersDamageData = new ConcurrentHashMap<Integer, Integer>();
+        playersDamageData = new ConcurrentHashMap<>();
     }
-    
-    /*void CheckCorrectData()
-    {
-        for (Iterator<Map.Entry<Integer, Integer>> it = playersDamageData.entrySet().iterator(); it.hasNext();)
-        {
-            int playerId = it.next().getKey();
-            if(!GlobalGameData.clients.containsKey(playerId))
-            {//player does not exist. forget it
-                it.remove();
-            }
-            else
-            {
-                if(GlobalGameData.clients.get(playerId).GetIsDead())
-                {//player is dead. Forget it too
-                    it.remove();
-                }
-            }
-        }
-    }*/
     
     public IntIntBoolClass GetEnemy(Vector2 myPosition, float searchRadius)
     {

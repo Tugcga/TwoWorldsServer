@@ -52,7 +52,7 @@ public class BulletHitDataClass
     
     public BulletHitDataClass()
     {
-        hitsData = new ArrayList<OneHitData>();
+        hitsData = new ArrayList<>();
     }
     
     public void AddData(int targetType, int targetId, int targetLife, int targetMaxLife, boolean isTargetDead, float blockTime, Vector2 position)

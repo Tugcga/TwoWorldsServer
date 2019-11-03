@@ -15,9 +15,9 @@ public class MonsterClass extends PersonClass
     
     int monsterTowerHostId;
     
-    public MonsterClass(MMOItem monsterLink, float speed, int mType, float r, int l, int tHost, int mDamage, float mDamageRadius, int mWType, float mESRadius, float coolDawn, float atackLength) 
+    public MonsterClass(MMOItem monsterLink, String monsterName, float speed, int mType, float r, int l, int tHost, int mDamage, float mDamageRadius, int mWType, float mESRadius, float coolDawn, float atackLength) 
     {
-        super(monsterLink.getId(), "Monster_" + monsterLink.getId(), speed, r, l);
+        super(monsterLink.getId(), monsterName, speed, r, l);
         monsterTowerHostId = tHost;
         Vector2 towerPos = GlobalGameData.towers.get(monsterTowerHostId).GetPosition();
         SetLastCorrectPosition(new Vec3D(towerPos.GetFloatX(), towerPos.GetFloatY(), 0));
@@ -28,7 +28,7 @@ public class MonsterClass extends PersonClass
     }
     
     public void AddDamageData(int atackerType, int atackerId, int damage)
-    {//из пули приходит информация о том, кто нанес удар. Пробрасываем в state
+    {
         state.AddDamageData(atackerType, atackerId, damage);
     }
     

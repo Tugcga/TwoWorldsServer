@@ -91,7 +91,6 @@ public class Vector2
         
     public static double Dot(Vector2 a, Vector2 b)
     {
-        //Logger.Log(a.toString() + " " + b.toString());
         return a.GetX()*b.GetX() + a.GetY() * b.GetY();
     }
     

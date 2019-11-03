@@ -1,4 +1,3 @@
-
 package Game.DataClasses;
 
 import OpenWorldRoom.OpenWorldRoomExtension;

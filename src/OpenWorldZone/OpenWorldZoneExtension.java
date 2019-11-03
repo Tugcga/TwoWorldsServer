@@ -38,12 +38,13 @@ public class OpenWorldZoneExtension extends SFSExtension
     {
         userModelIndexes = new ConcurrentHashMap<>();
         InitRoomNames();
-        GlobalGameData.loginNames = new ConcurrentHashMap<String, List<Integer>>();
-        GlobalGameData.chatMessages = new ConcurrentLinkedQueue<String>();
+        GlobalGameData.loginNames = new ConcurrentHashMap<>();
+        GlobalGameData.chatMessages = new ConcurrentLinkedQueue<>();
         try 
         {
             ChatMessagesStore.Init(this.getCurrentFolder() + "chatStore_config.json");
-        } catch (IOException ex) 
+        } 
+        catch (IOException ex) 
         {
             Logger.getLogger(OpenWorldZoneExtension.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -107,41 +108,42 @@ public class OpenWorldZoneExtension extends SFSExtension
     @Override
     public Object handleInternalMessage(String cmdName, Object params)
     {
-        if(cmdName.equals("GetUserModelIndex"))
-        {//what model used by the user
-            int sessionId = (int)params;
-            if(userModelIndexes.containsKey(sessionId))
-            {
-                return userModelIndexes.get(sessionId);
-            }
-            else
-            {//return -1 if the data is invalid
-                return -1;
-            }
-        }
-        else if(cmdName.equals("RemoveUserData"))
-        {//user disconnected, remove data about it model
-            RemoveUserData((int)params);
-        }
-        else if(cmdName.equals("DisconnectUser"))
+        switch (cmdName) 
         {
-            User user = (User)params;
-            getApi().disconnectUser(user);
-        }
-        else if(cmdName.equals("RemoveName"))
-        {
-            String name = (String)params;
-            LoginNamesController.RemoveLoginName(name);
-        }
-        else if(cmdName.equals("FilterLoggedUsers"))
-        {
-            List<User> users = (List<User>) params;
-            ArrayList<String> names = new ArrayList<String>();
-            for(User u : users)
-            {
-                names.add(u.getName());
-            }
-            LoginNamesController.FilterLoggedUsers(names, this);
+            case "GetUserModelIndex":
+                //what model used by the user
+                int sessionId = (int)params;
+                if(userModelIndexes.containsKey(sessionId))
+                {
+                    return userModelIndexes.get(sessionId);
+                }
+                else
+                {//return -1 if the data is invalid
+                    return -1;
+                }
+            case "RemoveUserData":
+                //user disconnected, remove data about it model
+                RemoveUserData((int)params);
+                break;
+            case "DisconnectUser":
+                User user = (User)params;
+                getApi().disconnectUser(user);
+                break;
+            case "RemoveName":
+                String name = (String)params;
+                LoginNamesController.RemoveLoginName(name);
+                break;
+            case "FilterLoggedUsers":
+                List<User> users = (List<User>) params;
+                ArrayList<String> names = new ArrayList<>();
+                users.forEach((u) -> 
+                {
+                    names.add(u.getName());
+                });
+                LoginNamesController.FilterLoggedUsers(names, this);
+                break;
+            default:
+                break;
         }
         return null;
     }
@@ -150,18 +152,11 @@ public class OpenWorldZoneExtension extends SFSExtension
     //------------------------------------------------------
     public void AddUserModelIndex(int sessionId, int modelIndex)
     {//used from Handler_RPCClientSelectCharacter, when client select the model
-        trace("Save sessionId=" + sessionId + " and model=" + modelIndex);
-        if(userModelIndexes.containsKey(sessionId))
-        {
-            trace("SessionId=" + sessionId + " store in userData yet, rwrite it");
-        }
         userModelIndexes.put(sessionId, modelIndex);
     }
     
     public void RemoveUserData(int sessionId)
     {//used from here
-        //int sessionId = getApi().getUserById(userId).getSession().getId();
-        trace("Try to remove sessionId=" + sessionId);
         if(userModelIndexes.containsKey(sessionId))
         {
             userModelIndexes.remove(sessionId);

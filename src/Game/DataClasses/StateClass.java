@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import OpenWorldRoom.Logger;
@@ -44,11 +39,11 @@ public class StateClass
     
     public void AddDamageData(int atackerType, int atackerId, int damage)
     {
-        Logger.Log("Monster " + person.GetId() + " obtain damage from " + atackerType + " " + atackerId + " " + damage);
+        //Logger.Log("Monster " + person.GetId() + " obtain damage from " + atackerType + " " + atackerId + " " + damage);
         enemies.AddDamageData(atackerType, atackerId, damage);
     }
     
-    //эта функция вызывается во время задачи обновления состояний монстра. 50 раз в секунду
+    //Update monsters and bullets 50 times per second
     public void TaskTick()
     {
         if(isStateble)//bullet is not stateble
@@ -129,11 +124,11 @@ public class StateClass
             isStateNew = true;
         }
         else if(currentState == 2)
-        {//уже идём к цели, переназначаем её
+        {//already fo to the target, change it
             isStateNew = SetEnemyTargetData(tType, tId);
         }
         else
-        {//какое-то другое состояние
+        {//other state
             
         }
         lastWalkTickTime = System.currentTimeMillis();
@@ -240,8 +235,6 @@ public class StateClass
         lastWalkTickTime = System.currentTimeMillis();
         currentState = 1;
         isStateNew = true;
-        
-        //Logger.Log("M" + person.GetId() + " start move from " + person.GetPosition().toString() + " to " + toWalkLocation.GetPosition().toString());
     }
     
     public void SetStateToIddle()
@@ -252,7 +245,6 @@ public class StateClass
         currentState = 0;
         toEnemyData.SetData(-1, -1);
         isStateNew = true;
-        //Logger.Log("M" + person.GetId() + " stop");
     }
     
     public void SetPosition(Vector2 pos)

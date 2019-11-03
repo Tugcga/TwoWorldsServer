@@ -15,7 +15,6 @@ public class FilterLoggedUsersTask implements Runnable
         }
         catch (Exception e)
         {
-            // In case of exceptions this try-catch prevents the task to stop running
             ExceptionMessageComposer emc = new ExceptionMessageComposer(e);
             Logger.Log(emc.toString());
         }

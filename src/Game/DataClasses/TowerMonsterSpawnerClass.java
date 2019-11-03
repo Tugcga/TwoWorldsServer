@@ -1,15 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import Game.Process.MonstersManagement;
-import static Game.Process.MonstersManagement.GetMonsterVariables;
-import Game.Process.NetworkDataProcess;
-import OpenWorldRoom.Logger;
-import com.smartfoxserver.v2.mmo.MMOItem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +27,7 @@ public class TowerMonsterSpawnerClass
     
     public int[] GetActiveMonsters()
     {
-        List<Integer> toReturn = new ArrayList<Integer>();
+        List<Integer> toReturn = new ArrayList<>();
         for(int mId : monsterIds)
         {
             if(mId != -1 && GlobalGameData.monsters.containsKey(mId) && !GlobalGameData.monsters.get(mId).GetIsDead())
@@ -54,7 +45,7 @@ public class TowerMonsterSpawnerClass
     }
     
     public void DeleteMonster(int monsterId)
-    {//Delete not from Global class, but from inner menagement
+    {//Delete not from Global class, but from inner manegement
         for(int i = 0; i < monsterIds.length; i++)
         {
             if(monsterIds[i] == monsterId)
@@ -110,8 +101,6 @@ public class TowerMonsterSpawnerClass
                 int newMonsterId = MonstersManagement.AddMonsterToTower(hostTowerId, newPosition);
                 //fill the slot
                 monsterIds[emptySlot] = newMonsterId;
-                
-                //Logger.Log("Tower " + hostTowerId + " emit monser " + newMonsterId + " to the slot " + emptySlot);
             }
         }
     }

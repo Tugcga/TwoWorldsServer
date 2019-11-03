@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Game.DataClasses;
 
 import java.io.File;
@@ -21,7 +16,7 @@ public class StartPointsClass
     public StartPointsClass(String fileData) throws IOException
     {
         String dataText = FileUtils.readFileToString(new File(fileData));
-        points = new ConcurrentHashMap<Integer, Vector2>();
+        points = new ConcurrentHashMap<>();
         int currentIndex = 0;
         if(!"".equals(dataText))
         {

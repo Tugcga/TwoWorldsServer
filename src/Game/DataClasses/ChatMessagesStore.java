@@ -1,6 +1,5 @@
 package Game.DataClasses;
 
-import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.util.JSONUtil;
@@ -62,12 +61,13 @@ public class ChatMessagesStore
         if(GlobalGameData.chatMessages.size() > 0)
         {
             FileWriter fileWriter = new FileWriter(filePrefix + GetTimeDate() + ".txt");
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            for(String m : GlobalGameData.chatMessages)
+            try (PrintWriter printWriter = new PrintWriter(fileWriter)) 
             {
-                printWriter.print(m + "\n");
+                for(String m : GlobalGameData.chatMessages)
+                {
+                    printWriter.print(m + "\n");
+                }
             }
-            printWriter.close();
 
             GlobalGameData.chatMessages.clear();
         }
