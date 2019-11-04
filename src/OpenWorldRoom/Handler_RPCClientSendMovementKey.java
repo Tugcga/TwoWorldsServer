@@ -24,12 +24,14 @@ public class Handler_RPCClientSendMovementKey extends BaseClientRequestHandler
             else
             {
                 //requst contains data but wrong types, kick the user
+                Logger.Log("User " + sender + " send wrong data throw RPCClientSendMovementKey request");
                 sender.disconnect(ClientDisconnectionReason.KICK);
             }
         }
         else
         {
             //requst does not contains proper data, kick the user
+            Logger.Log("User " + sender + " send wrong data throw RPCClientSendMovementKey request");
             sender.disconnect(ClientDisconnectionReason.KICK);
         }
     }

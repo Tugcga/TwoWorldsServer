@@ -1,6 +1,7 @@
 package Game.DataClasses;
 
 import Game.Process.NetworkDataProcess;
+import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.mmo.MMOItem;
 
 public class TowerClass extends PersonClass
@@ -82,6 +83,7 @@ public class TowerClass extends PersonClass
         {
             isDeadInit = false;
             SetAlive();
+            Logger.Log("Tower " + id + " resurect with " + maxLife + " hitpoints.");
             //Notificate all clients that tower resurects
             NetworkDataProcess.SayTowerResurect(this);
             NetworkDataProcess.SetTowerState(this, true, false);

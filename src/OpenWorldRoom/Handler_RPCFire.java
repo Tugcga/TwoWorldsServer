@@ -24,11 +24,13 @@ public class Handler_RPCFire extends BaseClientRequestHandler
             }
             else
             {
+                Logger.Log("User " + sender + " send wrong data throw RPCFire request");
                 sender.disconnect(ClientDisconnectionReason.KICK);
             }
         }
         else
         {
+            Logger.Log("User " + sender + " send wrong data throw RPCFire request");
             sender.disconnect(ClientDisconnectionReason.KICK);
         }
     }

@@ -5,6 +5,7 @@ import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.TowerClass;
+import OpenWorldRoom.Logger;
 
 public class BattleController 
 {
@@ -57,6 +58,7 @@ public class BattleController
                 {
                     WriteKillFact(2, tower.GetId(), atackerType, atackerId);
                     tower.StartDeath();
+                    Logger.Log("Tower " + targetId + " destroyed.");
                 }
                 else
                 {
