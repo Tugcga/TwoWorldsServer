@@ -4,6 +4,8 @@ import com.smartfoxserver.bitswarm.sessions.Session;
 import com.smartfoxserver.v2.core.ISFSEvent;
 import com.smartfoxserver.v2.core.SFSConstants;
 import com.smartfoxserver.v2.core.SFSEventParam;
+import com.smartfoxserver.v2.entities.data.SFSDataType;
+import com.smartfoxserver.v2.entities.data.SFSDataWrapper;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.exceptions.SFSErrorCode;
 import com.smartfoxserver.v2.exceptions.SFSErrorData;
@@ -35,7 +37,16 @@ public class Handler_LoginEvent extends BaseServerEventHandler
                     String newName = LoginNamesController.AddLoginName(userName);
                     outData.putUtfString(SFSConstants.NEW_LOGIN_NAME, newName);
                     
-                    ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getInt("model_index"));
+                    SFSDataWrapper modelIndexData = inData.get("model_index");
+                    if(modelIndexData.getTypeId() == SFSDataType.INT)
+                    {
+                        ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getInt("model_index"));
+                    }
+                    else
+                    {
+                        SFSErrorData errData = new SFSErrorData(SFSErrorCode.LOGIN_BAD_USERNAME);
+                        throw new SFSLoginException("User login does contains data about model index, but wrong type. Block login process: ", errData);
+                    }
                 }
                 else
                 {

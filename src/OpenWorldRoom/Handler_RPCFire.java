@@ -3,7 +3,10 @@ package OpenWorldRoom;
 import Game.Process.ClientsManagement;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+import com.smartfoxserver.v2.entities.data.SFSDataType;
+import com.smartfoxserver.v2.entities.data.SFSDataWrapper;
 import com.smartfoxserver.v2.extensions.BaseClientRequestHandler;
+import com.smartfoxserver.v2.util.ClientDisconnectionReason;
 
 public class Handler_RPCFire extends BaseClientRequestHandler
 {
@@ -12,7 +15,21 @@ public class Handler_RPCFire extends BaseClientRequestHandler
     {
         if(params.containsKey("posX") && params.containsKey("posY") && params.containsKey("angle"))
         {
-            ClientsManagement.ClientFire(sender.getId(), params.getFloat("posX"), params.getFloat("posY"), params.getFloat("angle"));
+            SFSDataWrapper posXData = params.get("posX");
+            SFSDataWrapper posYData = params.get("posY");
+            SFSDataWrapper angleData = params.get("angle");
+            if(posXData.getTypeId() == SFSDataType.FLOAT && posYData.getTypeId() == SFSDataType.FLOAT && angleData.getTypeId() == SFSDataType.FLOAT)
+            {
+                ClientsManagement.ClientFire(sender.getId(), params.getFloat("posX"), params.getFloat("posY"), params.getFloat("angle"));
+            }
+            else
+            {
+                sender.disconnect(ClientDisconnectionReason.KICK);
+            }
+        }
+        else
+        {
+            sender.disconnect(ClientDisconnectionReason.KICK);
         }
     }
     
