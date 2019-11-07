@@ -8,6 +8,7 @@ import Game.DataClasses.NetworkKeys;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.PlayerModelParametersClass;
 import Game.DataClasses.Vector2;
+import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
@@ -19,7 +20,8 @@ public class ClientsManagement
     public static void ClientJoinToTheGame(User user)
     {
         int userModelIndex = (int)GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("GetUserModelIndex", user.getSession().getId());
-        if(userModelIndex != -1)  // -1 - invalid value
+        //if(userModelIndex != -1)  // -1 - invalid value
+        if(GlobalGameData.serverConfig.IsPlayerModelCorrect(userModelIndex))
         {
             PlayerModelParametersClass playerParams = GlobalGameData.serverConfig.GetPlayerModelParameters(userModelIndex);
             PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
@@ -33,6 +35,7 @@ public class ClientsManagement
         }
         else
         {//user does not registered with some model_index, disconnect him
+            Logger.Log("User " + user + " try to login with wrong player model = " + userModelIndex);
             GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("DisconnectUser", user);
         }
     }

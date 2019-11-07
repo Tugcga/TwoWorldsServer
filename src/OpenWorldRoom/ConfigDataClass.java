@@ -140,6 +140,18 @@ public class ConfigDataClass
         }
     }
     
+    public boolean IsPlayerModelCorrect(int modelType)
+    {
+        if(playerModels.containsKey(modelType))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
     public PlayerModelParametersClass GetPlayerModelParameters(int modelType)
     {
         if(playerModels.containsKey(modelType))
