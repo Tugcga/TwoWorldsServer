@@ -12,6 +12,7 @@ import OpenWorldRoom.Logger;
 import com.smartfoxserver.v2.entities.User;
 import com.smartfoxserver.v2.entities.variables.SFSUserVariable;
 import com.smartfoxserver.v2.entities.variables.UserVariable;
+import com.smartfoxserver.v2.util.ClientDisconnectionReason;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,8 @@ public class ClientsManagement
         else
         {//user does not registered with some model_index, disconnect him
             Logger.Log("User " + user + " try to login with wrong player model = " + userModelIndex);
-            GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("DisconnectUser", user);
+            //GlobalGameData.server.getParentZone().getExtension().handleInternalMessage("DisconnectUser", user);
+            user.disconnect(ClientDisconnectionReason.KICK);
         }
     }
     
