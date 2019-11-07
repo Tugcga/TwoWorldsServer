@@ -20,14 +20,14 @@ public class PlayerClass extends PersonClass
     float deadTimeF; // in seconds
     long actualDeadTime;//on server side something less (why?)
     
-    public PlayerClass(User userLink, String accauntName, float speed, int mIndex, float fireCD, float r, int l)
+    public PlayerClass(User userLink, String accauntName, float speed, int mIndex, float fireCD, float r, int l, int shotErrorsMaxCount)
     {
         super(userLink.getId(), accauntName, speed, r, l);
         user = userLink;
         movement = new PlayerMovementClass(speed, this);
         killsStat = new KillsStatisticClass();
         modelIndex = mIndex;
-        fireController = new FireControllerClass(fireCD);
+        fireController = new FireControllerClass(fireCD, shotErrorsMaxCount, id);
         deadTime = GlobalGameData.serverConfig.GetPlayerDeadBlockTime();
         actualDeadTime = (int)(deadTime * 1.0);
         deadTimeF = (float)deadTime / 1000f;

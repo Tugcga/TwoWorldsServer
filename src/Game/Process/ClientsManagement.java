@@ -27,7 +27,8 @@ public class ClientsManagement
             PlayerModelParametersClass playerParams = GlobalGameData.serverConfig.GetPlayerModelParameters(userModelIndex);
             PlayerClass newPlayer = new PlayerClass(user, user.getName(), playerParams.GetPlayerSpeed(), 
                     userModelIndex, 
-                    playerParams.GetCoolDawn(), playerParams.GetPlayerRadius(), playerParams.GetPlayerLife());
+                    playerParams.GetCoolDawn(), playerParams.GetPlayerRadius(), playerParams.GetPlayerLife(),
+                    GlobalGameData.serverConfig.GetShotMaxErrors());
             
             newPlayer.GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
             GlobalGameData.clients.put(newPlayer.GetId(), newPlayer);
@@ -95,6 +96,16 @@ public class ClientsManagement
         }
     }
     
+    public static void ClientOverShotErrors(int clientId)
+    {
+        if(GlobalGameData.clients.containsKey(clientId))
+        {
+            User user = GlobalGameData.clients.get(clientId).GetUser();
+            Logger.Log("User " + user + " over limit of the wrong shot messages");
+            user.disconnect(ClientDisconnectionReason.KICK);
+        }
+    }
+    
     public static void ClientFire(int clientId, float posX, float posY, float angle)  // posX and posY - coordinates of the players cursor
     {
         Vector2 cursorPosition = new Vector2(posX, posY);
@@ -115,6 +126,10 @@ public class ClientsManagement
                     cursorPosition = collisionResult.intersectionPoint;
                 }
                 MonstersManagement.AddBullet(player.GetPosition(), cursorPosition, bulletType, player, collisionResult, 0, angle);
+            }
+            else
+            {
+                player.GetFireController().IncreaseShotError();
             }
         }
     }

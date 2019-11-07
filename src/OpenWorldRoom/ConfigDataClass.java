@@ -40,6 +40,8 @@ public class ConfigDataClass
     public int GetKillsNotificatorTime(){return killsNotificatorTime;}
     int maxCountRTree;
     public int GetMaxCountRTree(){return maxCountRTree;}
+    int shotMaxErrors;
+    public int GetShotMaxErrors() {return shotMaxErrors;}
     float collisionEdgeDelta;
     public float GetCollisionEdgeDelta() {return collisionEdgeDelta;}
     //float playerMovementRebuildPointTime;
@@ -95,6 +97,7 @@ public class ConfigDataClass
         playerMovementTaskUpdateTime = serverParams.getInt("playerMovementTaskUpdateTime");
         killsNotificatorTime = serverParams.getInt("killsNotificatorTime");
         maxCountRTree = serverParams.getInt("maxCountRTree");
+        shotMaxErrors = serverParams.getInt("shotMaxErrors");
         collisionEdgeDelta = serverParams.getFloat("collisionEdgeDelta");
         //playerMovementRebuildPointTime = serverParams.getFloat("playerMovementRebuildPointTime");
         //playerMovementDeltaWallDistance = serverParams.getFloat("playerMovementDeltaWallDistance");

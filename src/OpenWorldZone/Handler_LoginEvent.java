@@ -38,9 +38,9 @@ public class Handler_LoginEvent extends BaseServerEventHandler
                     outData.putUtfString(SFSConstants.NEW_LOGIN_NAME, newName);
                     
                     SFSDataWrapper modelIndexData = inData.get("model_index");
-                    if(modelIndexData.getTypeId() == SFSDataType.INT)
+                    if(modelIndexData.getTypeId() == SFSDataType.BYTE)
                     {
-                        ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getInt("model_index"));
+                        ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getByte("model_index"));
                     }
                     else
                     {
