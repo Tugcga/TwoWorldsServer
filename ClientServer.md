@@ -1,0 +1,1 @@
+Сервер написан на основе [SmartFox server](https://www.smartfoxserver.com/). Сам SmartFox написан на Java и имеет клиентские библиотеки на многих языках (C#, JavaScript, Java, Objective-C, C++, ActionScript).
