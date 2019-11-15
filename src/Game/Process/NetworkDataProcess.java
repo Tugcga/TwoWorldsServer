@@ -156,7 +156,7 @@ public class NetworkDataProcess
         params.putInt("id", bulletId);
         params.putDouble("x", damagePosX);
         params.putDouble("y", damagePosY);
-        params.putInt("type", bulletType);
+        params.putByte("type", (byte)bulletType);
         params.putSFSArray("hitData", hitData.GetSFSArray());
         GlobalGameData.server.send("RPCDestoyBullet", params, users);
     }
@@ -166,7 +166,7 @@ public class NetworkDataProcess
         Vec3D pos = new Vec3D(bullet.GetPosition().GetFloatX(), bullet.GetPosition().GetFloatY(), 0);
         List<User> users = GlobalGameData.room.getProximityList(pos);
         ISFSObject params = new SFSObject();
-        params.putInt("hostType", bullet.GetHostType());
+        params.putByte("hostType", (byte)bullet.GetHostType());
         params.putInt("hostId", bullet.GetHostId());
         params.putFloat("hostAngle", bullet.GetHostPerson().GetAngle());
         
@@ -174,7 +174,7 @@ public class NetworkDataProcess
         params.putInt("id", bullet.GetId());
         params.putFloat("delay", bullet.GetDelay());
         params.putFloat("speed", (float)bullet.GetSpeed());
-        params.putInt("bulletType", bullet.GetBulletType());
+        params.putByte("bulletType", (byte)bullet.GetBulletType());
         params.putFloat("damageRadius", bullet.GetRadius());
         
         params.putDouble("targetX", bullet.GetState().GetTargetLocation().GetPosition().GetX());
@@ -221,7 +221,7 @@ public class NetworkDataProcess
             List<User> users = GlobalGameData.room.getProximityList(pos);
             ISFSObject params = new SFSObject();
             params.putInt("monsterId", monsterId);
-            params.putInt("targetType", targetType);
+            params.putByte("targetType", (byte)targetType);
             params.putInt("targetId", targetId);
             params.putFloat("atackTime", atackTime);
             if(users.size() > 0)

@@ -44,13 +44,13 @@ public class ChatMessagesStore
     
     public static void AddMessage(String name, String ip, String message) throws IOException
     {
-        GlobalGameData.chatMessages.add(
+        ZoneGlobalData.chatMessages.add(
                 (writeName ? "[" + name + "]" : "") +
                 (writeIP ? "[" + ip + "]" : "") + 
                 (writeTime ? "[" + GetTimeDate() + "]" : "") + 
                 "[" + message + "]");
         
-        if(GlobalGameData.chatMessages.size() >= messagesCount)
+        if(ZoneGlobalData.chatMessages.size() >= messagesCount)
         {
             SaveMessages();
         }
@@ -58,18 +58,18 @@ public class ChatMessagesStore
     
     public static void SaveMessages() throws IOException
     {
-        if(GlobalGameData.chatMessages.size() > 0)
+        if(ZoneGlobalData.chatMessages.size() > 0)
         {
             FileWriter fileWriter = new FileWriter(filePrefix + GetTimeDate() + ".txt");
             try (PrintWriter printWriter = new PrintWriter(fileWriter)) 
             {
-                for(String m : GlobalGameData.chatMessages)
+                for(String m : ZoneGlobalData.chatMessages)
                 {
                     printWriter.print(m + "\n");
                 }
             }
 
-            GlobalGameData.chatMessages.clear();
+            ZoneGlobalData.chatMessages.clear();
         }
     }
     

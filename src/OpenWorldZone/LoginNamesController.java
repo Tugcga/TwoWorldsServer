@@ -1,6 +1,6 @@
 package OpenWorldZone;
 
-import Game.DataClasses.GlobalGameData;
+import Game.DataClasses.ZoneGlobalData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +10,9 @@ public class LoginNamesController
 {
     public static String AddLoginName(String name)
     {
-        if(GlobalGameData.loginNames.containsKey(name))
+        if(ZoneGlobalData.loginNames.containsKey(name))
         {
-            List<Integer> nameIndexes = GlobalGameData.loginNames.get(name);
+            List<Integer> nameIndexes = ZoneGlobalData.loginNames.get(name);
             //find the first free index for the name
             Integer newIndex = nameIndexes.size() + 1;
             for(Integer i = 1; i < nameIndexes.size() + 2; i++)
@@ -24,7 +24,7 @@ public class LoginNamesController
                 }
             }
             nameIndexes.add(newIndex);
-            GlobalGameData.loginNames.replace(name, nameIndexes);
+            ZoneGlobalData.loginNames.replace(name, nameIndexes);
             if(newIndex > 1)
             {
                 return name + "#" + newIndex;
@@ -38,7 +38,7 @@ public class LoginNamesController
         {
             List<Integer> newIndexes = new ArrayList<>();
             newIndexes.add(1);
-            GlobalGameData.loginNames.put(name, newIndexes);
+            ZoneGlobalData.loginNames.put(name, newIndexes);
             return name;
         }
     }
@@ -69,12 +69,12 @@ public class LoginNamesController
     {
         String toDelete = NameToName(name);
         Integer nameIndex = NameToIndex(name);
-        if(GlobalGameData.loginNames.containsKey(toDelete))
+        if(ZoneGlobalData.loginNames.containsKey(toDelete))
         {
-            List<Integer> nameIndexes = GlobalGameData.loginNames.get(toDelete);
+            List<Integer> nameIndexes = ZoneGlobalData.loginNames.get(toDelete);
             if(name.equals(toDelete) || nameIndexes.size() == 1)
             {//the name has only one index 1
-                GlobalGameData.loginNames.remove(name);
+                ZoneGlobalData.loginNames.remove(name);
             }
             else
             {
@@ -107,8 +107,8 @@ public class LoginNamesController
             }
         });
         //next set values in the GlobalGameData.loginNames
-        GlobalGameData.loginNames.clear();
-        GlobalGameData.loginNames.putAll(namesCount);
+        ZoneGlobalData.loginNames.clear();
+        ZoneGlobalData.loginNames.putAll(namesCount);
     }
     
     public static String FilterName(String name)

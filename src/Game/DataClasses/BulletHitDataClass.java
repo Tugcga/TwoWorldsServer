@@ -34,7 +34,7 @@ class OneHitData
     public ISFSObject GetSFSObject()
     {
         ISFSObject toReturn = new SFSObject();
-        toReturn.putInt("type", type);
+        toReturn.putByte("type", (byte)type);
         toReturn.putInt("id", id);
         toReturn.putInt("life", life);
         toReturn.putInt("maxLife", maxLife);

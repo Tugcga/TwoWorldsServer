@@ -17,9 +17,9 @@ public class Handler_RPCClientSendMovementKey extends BaseClientRequestHandler
         {
             SFSDataWrapper dirIndexData = params.get("dirIndex");
             SFSDataWrapper angleData = params.get("angle");
-            if(dirIndexData.getTypeId() == SFSDataType.SHORT && angleData.getTypeId() == SFSDataType.FLOAT)
+            if(dirIndexData.getTypeId() == SFSDataType.BYTE && angleData.getTypeId() == SFSDataType.FLOAT)
             {
-                ClientsManagement.ClientChangeMovement(sender.getId(), params.getShort("dirIndex"), params.getFloat("angle"));
+                ClientsManagement.ClientChangeMovement(sender.getId(), params.getByte("dirIndex") - 1, params.getFloat("angle"));
             }
             else
             {

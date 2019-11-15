@@ -32,15 +32,25 @@ public class Handler_LoginEvent extends BaseServerEventHandler
             if(((OpenWorldZoneExtension) this.getParentExtension()).GetRoomNames().size() > 0)
             {
                 //here we save data about logn model_index
-                if(inData != null && inData.containsKey("model_index"))
+                if(inData != null && inData.containsKey("modelIndex"))
                 {
                     String newName = LoginNamesController.AddLoginName(userName);
                     outData.putUtfString(SFSConstants.NEW_LOGIN_NAME, newName);
                     
-                    SFSDataWrapper modelIndexData = inData.get("model_index");
+                    boolean userNeedMap = false;
+                    if(inData.containsKey("needMap"))
+                    {
+                        SFSDataWrapper needMapData = inData.get("needMap");
+                        if(needMapData.getTypeId() == SFSDataType.BOOL)
+                        {
+                            userNeedMap = inData.getBool("needMap");
+                        } 
+                    }
+                    
+                    SFSDataWrapper modelIndexData = inData.get("modelIndex");
                     if(modelIndexData.getTypeId() == SFSDataType.BYTE)
                     {
-                        ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getByte("model_index"));
+                        ((OpenWorldZoneExtension) this.getParentExtension()).AddUserModelIndex(session.getId(), inData.getByte("modelIndex"), userNeedMap);
                     }
                     else
                     {

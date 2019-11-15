@@ -67,18 +67,18 @@ public class MonsterClass extends PersonClass
         toReturn.putInt("maxLife", GetMaxLife());
         
         //movement
-        toReturn.putInt("state", GetState().GetState());
-        toReturn.putDouble("speed", GetSpeed());
-        toReturn.putInt("target_type", GetState().GetTargetEnemyType());
-        toReturn.putInt("target_id", GetState().GetTargetEnemyId());
+        toReturn.putByte("state", (byte)GetState().GetState());
+        toReturn.putFloat("speed", (float)GetSpeed());
+        toReturn.putByte("targetType", (byte)(GetState().GetTargetEnemyType() + 1));
+        toReturn.putInt("targetId", GetState().GetTargetEnemyId());
         Vector2 targtPosition = GetState().GetTargetLocation().GetPosition();
-        toReturn.putDouble("target_position_x", targtPosition.GetX());
-        toReturn.putDouble("target_position_y", targtPosition.GetY());
+        toReturn.putDouble("targetPositionX", targtPosition.GetX());
+        toReturn.putDouble("targetPositionY", targtPosition.GetY());
         
         //position
         Vector2 position = GetLocation().GetPosition();
-        toReturn.putDouble("position_x", position.GetX());
-        toReturn.putDouble("position_y", position.GetY());
+        toReturn.putDouble("positionX", position.GetX());
+        toReturn.putDouble("positionY", position.GetY());
         
         return toReturn;
     }

@@ -110,13 +110,13 @@ public class PlayerClass extends PersonClass
         toReturn.putInt("maxLife", GetMaxLife());
         //position
         Vector2 position = GetPosition();
-        toReturn.putDouble("location_x", position.GetX());
-        toReturn.putDouble("location_y", position.GetY());
+        toReturn.putDouble("locationX", position.GetX());
+        toReturn.putDouble("locationY", position.GetY());
         //moving
         toReturn.putFloat("angle", GetAngle());
         toReturn.putFloat("moveAngle", movement.GetMoveAngle());
         toReturn.putBool("isMove", movement.IsMove());
-        toReturn.putDouble("speed", GetSpeed());
+        toReturn.putFloat("speed", (float)GetSpeed());
         return toReturn;
     }
     

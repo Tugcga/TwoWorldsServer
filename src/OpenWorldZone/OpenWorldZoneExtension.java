@@ -2,6 +2,8 @@ package OpenWorldZone;
 
 import Game.DataClasses.ChatMessagesStore;
 import Game.DataClasses.GlobalGameData;
+import Game.DataClasses.UserLoginDataClass;
+import Game.DataClasses.ZoneGlobalData;
 import Game.Process.FilterLoggedUsersTask;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.controllers.SystemRequest;
@@ -26,7 +28,7 @@ import java.util.logging.Logger;
 public class OpenWorldZoneExtension extends SFSExtension
 {
     private ScheduledFuture<?> saveChatTask;
-    Map<Integer, Integer> userModelIndexes;  // this map used in RoomExtension for creating player, key - sessionId, but not UserId
+    Map<Integer, UserLoginDataClass> userLoginDatas;  // this map used in RoomExtension for creating player, key - sessionId, but not UserId
     List<Room> roomList;
     SFSArray roomNames;
     boolean isServerInit;
@@ -36,10 +38,10 @@ public class OpenWorldZoneExtension extends SFSExtension
     @Override
     public void init() 
     {
-        userModelIndexes = new ConcurrentHashMap<>();
+        userLoginDatas = new ConcurrentHashMap<>();
         InitRoomNames();
-        GlobalGameData.loginNames = new ConcurrentHashMap<>();
-        GlobalGameData.chatMessages = new ConcurrentLinkedQueue<>();
+        ZoneGlobalData.loginNames = new ConcurrentHashMap<>();
+        ZoneGlobalData.chatMessages = new ConcurrentLinkedQueue<>();
         try 
         {
             ChatMessagesStore.Init(this.getCurrentFolder() + "chatStore_config.json");
@@ -113,14 +115,16 @@ public class OpenWorldZoneExtension extends SFSExtension
             case "GetUserModelIndex":
                 //what model used by the user
                 int sessionId = (int)params;
-                if(userModelIndexes.containsKey(sessionId))
+                if(userLoginDatas.containsKey(sessionId))
                 {
-                    return userModelIndexes.get(sessionId);
+                    return userLoginDatas.get(sessionId).GetModelIndex();
                 }
                 else
                 {//return -1 if the data is invalid
                     return -1;
                 }
+            case "GetUserNeedMap":
+                return GetUserNeedMap((int)params);
             case "RemoveUserData":
                 //user disconnected, remove data about it model
                 RemoveUserData((int)params);
@@ -150,16 +154,28 @@ public class OpenWorldZoneExtension extends SFSExtension
     
     // Custom methods
     //------------------------------------------------------
-    public void AddUserModelIndex(int sessionId, int modelIndex)
+    public void AddUserModelIndex(int sessionId, int modelIndex, boolean needMap)
     {//used from Handler_RPCClientSelectCharacter, when client select the model
-        userModelIndexes.put(sessionId, modelIndex);
+        userLoginDatas.put(sessionId, new UserLoginDataClass(modelIndex, needMap));
+    }
+    
+    boolean GetUserNeedMap(int sessionId)
+    {
+        if(userLoginDatas.containsKey(sessionId))
+        {
+            return userLoginDatas.get(sessionId).GetNeedMap();
+        }
+        else
+        {
+            return false;
+        }
     }
     
     public void RemoveUserData(int sessionId)
     {//used from here
-        if(userModelIndexes.containsKey(sessionId))
+        if(userLoginDatas.containsKey(sessionId))
         {
-            userModelIndexes.remove(sessionId);
+            userLoginDatas.remove(sessionId);
         }
     }
     

@@ -1,17 +1,15 @@
 package Game.DataClasses;
 
-import OpenWorldRoom.Logger;
-
 public class StateClass 
 {
-    float switchTime;//время, через которое происходит смена состояния. Выбрасывает попытку идти куда-то
+    float switchTime;//delay time between random state change
     PersonClass person;//here we can read current location and change it
     
-    long lastSwitchTime;//считается в милисекундах
+    long lastSwitchTime;//in milliseconds
     long emitTime; // time of the appereance
     int currentState;//0 - do nothing, 1 - walk to the point, 2 -- follow to enemy
     LocationClass toWalkLocation;//store the point in the state = 1
-    IntIntClass toEnemyData;//type, id для цели, за которой следует, когда state=2 (type=0 - player, 1 - monster)
+    IntIntClass toEnemyData;//type, id for the target, when state = 2 (type = 0 - player, 1 - monster)
     long lastWalkTickTime;
     double locationDelta = 0.1f;
     boolean isStateble;
@@ -39,7 +37,6 @@ public class StateClass
     
     public void AddDamageData(int atackerType, int atackerId, int damage)
     {
-        //Logger.Log("Monster " + person.GetId() + " obtain damage from " + atackerType + " " + atackerId + " " + damage);
         enemies.AddDamageData(atackerType, atackerId, damage);
     }
     
