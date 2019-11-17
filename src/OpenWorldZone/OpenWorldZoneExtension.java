@@ -1,10 +1,8 @@
 package OpenWorldZone;
 
 import Game.DataClasses.ChatMessagesStore;
-import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.UserLoginDataClass;
 import Game.DataClasses.ZoneGlobalData;
-import Game.Process.FilterLoggedUsersTask;
 import com.smartfoxserver.v2.SmartFoxServer;
 import com.smartfoxserver.v2.controllers.SystemRequest;
 import com.smartfoxserver.v2.controllers.filter.ISystemFilterChain;
