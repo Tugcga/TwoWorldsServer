@@ -196,6 +196,15 @@ public class NetworkDataProcess
         GlobalGameData.server.send("RPCKillsMessage", params, GlobalGameData.room.getUserList());
     }
     
+    /*public static void ChatMessage(User user, String message)
+    {
+        ISFSObject params = new SFSObject();
+        params.putUtfString("sender", user.getName());
+        params.putInt("senderId", user.getId());
+        params.putUtfString("message", message);
+        GlobalGameData.server.send("ChatMessage", params, GlobalGameData.room.getUserList());
+    }*/
+    
     public static void SayMonsterDead(int mosnterId)
     {
         if(GlobalGameData.monsters.containsKey(mosnterId))
