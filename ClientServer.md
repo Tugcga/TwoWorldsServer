@@ -156,6 +156,14 @@ death | Int | Сколько раз игрок умер
 --- | --- | ---
 points | DoubleArray | Массив чисел, задающих координаты отрезков - границ проходимых областей. Каждый отрезок задаётся четырьмя числами: первые два числа из каждой четвёрки массива задают координаты первого конца отрезка, а третий и четвёртый числа - координаты второго конца отрезка
 
+Команда **RPCChatMessage**. Вызывается, когда кто-то из игроков отправляет сообщение в чат. Конечно, при отправке сообщение можно использовать стандартное событие `SFSEvent.PUBLIC_MESSAGE`, однако так как все игроки подсоединяются в комнату типа `MMORoom`, то публичные сообщения доходят только до тех игроков, кто находится в пределах AoI (области видимости). В этом случае нельзя увидеть, как кто-то ругается в чате, если он находится слишком далеко.
+
+Поле | Тип | Примечание
+--- | --- | ---
+sender | String | Имя пользователя, отправившего сообщение
+senderId | Int | Идентификационный номер пользователя, отправившего сообщение
+message | String | Текст сообщения
+
 
 Ещё каждый клиент получает от сервера информацию об обновлении состояний MMO-сущностей. На стороне сервера есть два типа таких сущностей: игроки и те MMO-сущности, которые управляются сервером. Подобные обновления происходят, в том числе, когда какая-то сущность покидает (или наоборот появляется) в области видимости какого-то клиента. В этом случае тому клиенту присылается информация о том, кто исчез и кто появился. Есть три события, вызывающих обновления: UserVariablesUpdate, MMOItemVariablesUpdate и ProximityListUpdate. Каждому клиенту при вызове события UserVariablesUpdate присылаются данные об одном игроке, при вызове события MMOItemVariablesUpdate присылаются данные об одной MMO-сущности, управляемой сервером, а при вызове события ProximityListUpdate присылаются списки игроков и MMO-сущностей, которые покинули область видимости, а также те, которые наоборот, появились в области видимости.
 
@@ -292,7 +300,8 @@ void FixedUpdate()
 `SFSEvent.PROXIMITY_LIST_UPDATE` | Обновление данных об области видимости клиента
 `SFSEvent.EXTENSION_RESPONSE` | Внешняя команда от сервера
 `SFSEvent.ADMIN_MESSAGE` | Текстовое сообщение от администратора. Такого сорта сообщения можно посылать индивидуальным клиентам через админку сервера
-`SFSEvent.PUBLIC_MESSAGE` | Текстовое сообщение от других игроков
+
+Дополнительно клиент может принимать событие `SFSEvent.PUBLIC_MESSAGE`, вместе с которым приходят сообщения в чате. Однако, посредством этого события приходят только сообщения, отправленные игроком в пределах AoI (области видимости). Так что лучше это событие вообще не использовать.
 
 Последовательность событий до того, как начнётся непосредственно игра: `CONNECTION` -> `LOGIN` -> `ROOM_JOIN`. Остальные события из списка происходят во время игрового процесса. Чтобы зарегистрировать все эти события, надо **перед** командой `sfs.Connect(cfg)` написать следующее:
 
@@ -302,7 +311,6 @@ sfs.AddEventListener(SFSEvent.CONNECTION_LOST, OnConnectionLost);
 sfs.AddEventListener(SFSEvent.LOGIN, OnLogin);
 sfs.AddEventListener(SFSEvent.ROOM_JOIN, OnRoomJoin);
 sfs.AddEventListener(SFSEvent.ADMIN_MESSAGE, OnAdminMessage);
-sfs.AddEventListener(SFSEvent.PUBLIC_MESSAGE, OnPublicMessage);
 sfs.AddEventListener(SFSEvent.USER_VARIABLES_UPDATE, OnUserVarsUpdate);
 sfs.AddEventListener(SFSEvent.MMOITEM_VARIABLES_UPDATE, OnMMOItemVarsUpdate);
 sfs.AddEventListener(SFSEvent.PROXIMITY_LIST_UPDATE, OnProximityListUpdate);
@@ -333,11 +341,6 @@ public void OnRoomJoin(BaseEvent evt)
 }
 
 public void OnAdminMessage(BaseEvent evt)
-{
-	//...
-}
-
-public void OnPublicMessage(BaseEvent evt)
 {
 	//...
 }
@@ -423,16 +426,10 @@ public void OnRoomJoin(BaseEvent evt)
 }
 ```
 
-События **ADMIN_MESSAGE** и **PUBLIC_MESSAGE**. Содержат два параметра: `sender` и `message`. Параметр `sender` содержит объект, представляющий пользователя, пославшего сообщение, в `message` непосредственно сообщение.
+Событие **ADMIN_MESSAGE** (и, возможно, **PUBLIC_MESSAGE**). Содержит два параметра: `sender` и `message`. Параметр `sender` содержит объект, представляющий пользователя, пославшего сообщение, в `message` непосредственно сообщение.
 
 ```csharp
 public void OnAdminMessage(BaseEvent evt)
-{
-	User sender = (User)evt.Params["sender"];
-	string message = string)evt.Params["message"];
-}
-
-public void OnPublicMessage(BaseEvent evt)
 {
 	User sender = (User)evt.Params["sender"];
 	string message = string)evt.Params["message"];
