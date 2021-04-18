@@ -1,12 +1,16 @@
 package OpenWorldRoom;
 
 import Game.DataClasses.BulletClass;
+import Game.DataClasses.CollectableClass;
+import Game.DataClasses.CollectableProcessorClass;
 import Game.DataClasses.CollisionDataClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.StartPointsClass;
 import Game.DataClasses.TowerClass;
+import Game.DataClasses.Vector2;
+import Game.Process.CollectableControllerTask;
 import Game.Process.FilterLoggedUsersTask;
 import Game.Process.KillsNotificatorTask;
 import Game.Process.MonsterControllerTask;
@@ -33,6 +37,7 @@ public class OpenWorldRoomExtension extends SFSExtension
     private ScheduledFuture<?> towerMonsterResurectorTask;
     private ScheduledFuture<?> towerAtackerTask;
     private ScheduledFuture<?> filterLoggedUsersTask;
+    private ScheduledFuture<?> collectableControllerTask;
 
     @Override
     public void init() 
@@ -44,6 +49,7 @@ public class OpenWorldRoomExtension extends SFSExtension
             GlobalGameData.startPoints = new StartPointsClass(this.getCurrentFolder() + "PlayerStartPoints.txt");
             InitGameData();
             GlobalGameData.collisionMap = new CollisionDataClass(this.getCurrentFolder() + "CollisionMap.txt");
+            GlobalGameData.collectableProcessor = new CollectableProcessorClass();  // we use collisionMap for inicialization of collectableProcessor
             TowersManagement.CreateTowers(this.getCurrentFolder() + "Towers.txt");
 
             // Register handler for user join/leave room events
@@ -60,6 +66,7 @@ public class OpenWorldRoomExtension extends SFSExtension
             towerMonsterResurectorTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerMonsterResurectorTask(), 0, GlobalGameData.serverConfig.GetTowerResurectMonsterTime(), TimeUnit.MILLISECONDS);
             towerAtackerTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new TowerAtackerTask(), 0, GlobalGameData.serverConfig.GetTowerAtackTickTime(), TimeUnit.MILLISECONDS);
             filterLoggedUsersTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new FilterLoggedUsersTask(), GlobalGameData.serverConfig.GetFilterLoggedUserNamesTime(), GlobalGameData.serverConfig.GetFilterLoggedUserNamesTime(), TimeUnit.MILLISECONDS);
+            collectableControllerTask = GlobalGameData.sfs.getTaskScheduler().scheduleAtFixedRate(new CollectableControllerTask(), GlobalGameData.serverConfig.GetCollectableTaskUpdateTime(), GlobalGameData.serverConfig.GetCollectableTaskUpdateTime(), TimeUnit.MILLISECONDS);
         }
         catch (IOException ex) 
         {
@@ -91,5 +98,6 @@ public class OpenWorldRoomExtension extends SFSExtension
         towerMonsterResurectorTask.cancel(true);
         towerAtackerTask.cancel(true);
         filterLoggedUsersTask.cancel(true);
+        collectableControllerTask.cancel(true);
     }
 }

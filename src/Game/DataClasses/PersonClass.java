@@ -75,6 +75,27 @@ public class PersonClass
         return maxLife;
     }
     
+    public void IncreaseMaxLife(int increaseValue, boolean maximizeLife)
+    {
+        maxLife += increaseValue;
+        if(!isDead && maximizeLife)
+        {
+            life = maxLife;
+        }
+    }
+    
+    public void IncreaseLife(int increaseValue)
+    {
+        if(!isDead)
+        {
+            life += increaseValue;
+            if(life > maxLife)
+            {
+                life = maxLife;
+            }   
+        }
+    }
+    
     public boolean GetIsDead()
     {
         return isDead;
@@ -104,6 +125,15 @@ public class PersonClass
     public Vector2 GetPosition()
     {
         return location.GetPosition();
+    }
+    
+    //return random position inside the disc of the person
+    public Vector2 GetRandomPositionInsideRadius()
+    {
+        LocationClass l = new LocationClass();
+        l.SetPosition(GetPosition());
+        l.SetRandomShift(GetRadius());
+        return l.GetPosition();
     }
     
     public Vec3D GetPosition3D()

@@ -35,9 +35,10 @@ public class NetworkKeys
     public static final String key_tower_monsterMaxRadius = "tmma";
     public static final String key_tower_atackRadius = "tar";
     
-    //kinds of the erver-side objectsd
+    //kinds of the erver-side objects
     public static final int monsterKind = 0;
     public static final int bulletKind = 1;
     public static final int towerKind = 2;
+    public static final int collectKind = 3;
     
 }

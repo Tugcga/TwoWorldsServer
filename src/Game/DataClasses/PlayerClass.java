@@ -71,9 +71,11 @@ public class PlayerClass extends PersonClass
         if(isDeadInit && System.currentTimeMillis() - startDeadTime > actualDeadTime)
         {
             isDeadInit = false;
-            SetAlive();
+            
             //set position at one of start points
             GetLocation().SetPosition(GlobalGameData.startPoints.GetPoint());
+            
+            SetAlive();
             //Notificate all clients that player resurect
             NetworkDataProcess.UpdateClientData(this);
             NetworkDataProcess.SetPlayerState(this, true, false);

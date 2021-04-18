@@ -1,11 +1,13 @@
 package Game.Process;
 
 import Game.DataClasses.BulletHitDataClass;
+import Game.DataClasses.CollectableProcessorClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
 import Game.DataClasses.PlayerClass;
 import Game.DataClasses.TowerClass;
 import OpenWorldRoom.Logger;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleController 
 {
@@ -76,5 +78,25 @@ public class BattleController
         {
             GlobalGameData.clients.get(atackerId).NoteKiling(targetType, targetId);
         }
+        
+        //try to emit heal object in the center of the killed person
+        boolean isEmit =  ThreadLocalRandom.current().nextFloat() < GlobalGameData.serverConfig.GetHealAfterDeathProbability();
+        if(isEmit)
+        {
+            if(targetType == 0 && GlobalGameData.clients.containsKey(targetId))
+            {
+                CollectableProcessorClass.EmitCollectable(0, GlobalGameData.clients.get(targetId).GetRandomPositionInsideRadius());
+            }
+            else if(targetType == 1 && GlobalGameData.monsters.containsKey(targetId))
+            {
+                CollectableProcessorClass.EmitCollectable(0, GlobalGameData.monsters.get(targetId).GetRandomPositionInsideRadius());
+            }
+            else if(targetType == 2 && GlobalGameData.towers.containsKey(targetId))
+            {
+                CollectableProcessorClass.EmitCollectable(0, GlobalGameData.towers.get(targetId).GetRandomPositionInsideRadius());
+            }
+        }
+        
+        //GlobalGameData.collectableProcessor.LogInfo();
     }
 }

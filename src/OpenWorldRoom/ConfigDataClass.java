@@ -1,6 +1,7 @@
 package OpenWorldRoom;
 
 import Game.DataClasses.BulletParametersClass;
+import Game.DataClasses.CollectableParametersClass;
 import Game.DataClasses.MonsterParametersClass;
 import Game.DataClasses.PlayerModelParametersClass;
 import Game.DataClasses.TowerParametersClass;
@@ -21,12 +22,15 @@ public class ConfigDataClass
     Map<Integer, MonsterParametersClass> monsterParameters;
     Map<Integer, BulletParametersClass> bulletsParameters;
     Map<Integer, TowerParametersClass> towerParameters;
+    Map<Integer, CollectableParametersClass> collectableParameters;
     ISFSArray playersDataSource;
     public ISFSArray GetPlayersDataSource() {return playersDataSource;}
     ISFSArray bulletsDataSource;
     public ISFSArray GetBulletsDataSource() {return bulletsDataSource;}
     ISFSArray towerDataSource;
     public ISFSArray GetTowerDataSource() {return towerDataSource;}
+    ISFSArray collectableDataSource;
+    public ISFSArray GetCollectableDataSource() {return collectableDataSource;}
     
     int playerDeadBlockTime;
     public int GetPlayerDeadBlockTime(){return playerDeadBlockTime;}
@@ -44,16 +48,18 @@ public class ConfigDataClass
     public int GetShotMaxErrors() {return shotMaxErrors;}
     float collisionEdgeDelta;
     public float GetCollisionEdgeDelta() {return collisionEdgeDelta;}
-    //float playerMovementRebuildPointTime;
-    //public float GetPlayerMovementRebuildPointTime() {return playerMovementRebuildPointTime;}
-    //float playerMovementDeltaWallDistance;
-    //public float GetPlayerMovementDeltaWallDistance() {return playerMovementDeltaWallDistance;}
     int towerResurectMonsterTime;
     public int GetTowerResurectMonsterTime() {return towerResurectMonsterTime;}
     int towerAtackTickTime;
     public int GetTowerAtackTickTime() {return towerAtackTickTime;}
     int filterLoggedUserNamesTime;
     public int GetFilterLoggedUserNamesTime() {return filterLoggedUserNamesTime;}
+    int collectableTaskUpdateTime;
+    public int GetCollectableTaskUpdateTime() {return collectableTaskUpdateTime;}
+    double collectableQuadrantSize;
+    public double GetCollectableQuadrantSize() {return collectableQuadrantSize;}
+    float healAfterDeathProbability;
+    public float GetHealAfterDeathProbability() {return healAfterDeathProbability;}
         
     public ConfigDataClass(String fileName) throws IOException
     {
@@ -64,6 +70,7 @@ public class ConfigDataClass
         SetServerParameters(configObject.getSFSArray("serverParameters").getSFSObject(0));
         SetBulletsParams(configObject.getSFSArray("bullets"));
         SetTowerParameters(configObject.getSFSArray("towers"));
+        SetCollectableParameters(configObject.getSFSArray("collectables"));
     }
     
     private void SetPlayerData(ISFSArray playerData)
@@ -99,11 +106,12 @@ public class ConfigDataClass
         maxCountRTree = serverParams.getInt("maxCountRTree");
         shotMaxErrors = serverParams.getInt("shotMaxErrors");
         collisionEdgeDelta = serverParams.getFloat("collisionEdgeDelta");
-        //playerMovementRebuildPointTime = serverParams.getFloat("playerMovementRebuildPointTime");
-        //playerMovementDeltaWallDistance = serverParams.getFloat("playerMovementDeltaWallDistance");
         towerResurectMonsterTime = serverParams.getInt("towerResurectMonsterTime");
         towerAtackTickTime = serverParams.getInt("towerAtackTickTime");
         filterLoggedUserNamesTime = serverParams.getInt("filterLoggedUserNamesTime");
+        collectableTaskUpdateTime = serverParams.getInt("collectableTaskUpdateTime");
+        collectableQuadrantSize = serverParams.getDouble("collectableQuadrantSize");
+        healAfterDeathProbability = serverParams.getFloat("healAfterDeathProbability");
     }
     
     private void SetBulletsParams(ISFSArray bulletsParams)
@@ -127,6 +135,18 @@ public class ConfigDataClass
             ISFSObject tower = towerParams.getSFSObject(i);
             TowerParametersClass newParams = new TowerParametersClass(tower);
             towerParameters.put(newParams.GetType(), newParams);
+        }
+    }
+    
+    private void SetCollectableParameters(ISFSArray collectableParams)
+    {
+        collectableDataSource = collectableParams;
+        collectableParameters = new ConcurrentHashMap<>();
+        for(int i = 0; i < collectableParams.size(); i++)
+        {
+            ISFSObject collectable = collectableParams.getSFSObject(i);
+            CollectableParametersClass newParams = new CollectableParametersClass(collectable);
+            collectableParameters.put(newParams.GetType(), newParams);
         }
     }
     
@@ -191,6 +211,19 @@ public class ConfigDataClass
         {
             Integer[] keySet = towerParameters.keySet().toArray(new Integer[0]);
             return towerParameters.get(keySet[0]);
+        }
+    }
+    
+    public CollectableParametersClass GetCollectableParameters(int collectType)
+    {
+        if(collectableParameters.containsKey(collectType))
+        {
+            return collectableParameters.get(collectType);
+        }
+        else
+        {
+            Integer[] keySet = collectableParameters.keySet().toArray(new Integer[0]);
+            return collectableParameters.get(keySet[0]);
         }
     }
 }

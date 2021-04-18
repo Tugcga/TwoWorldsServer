@@ -3,6 +3,7 @@ package Game.Process;
 
 import Game.DataClasses.BulletClass;
 import Game.DataClasses.BulletHitDataClass;
+import Game.DataClasses.CollectableClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.MonsterClass;
 import Game.DataClasses.PlayerClass;
@@ -76,8 +77,8 @@ public class NetworkDataProcess
             monster.ApplyDamage(monster.GetMaxLife());
             Logger.Log("Monster " + monster.GetId() + " out of map limit. Kill him.");
         }
-    }
     
+    }
     public static void SetBulletState(BulletClass bullet, boolean isUpdateOnClients, boolean isFirstCall)
     {
         MMOItem bulletItem = bullet.GetBulletItem();
@@ -100,6 +101,15 @@ public class NetworkDataProcess
             bullet.SetForceDestroy();
             Logger.Log("Bullet " + bullet.GetId() + " out of map limit");
         }
+    }
+    
+    public static void SetCollectableState(CollectableClass collect)
+    {
+        MMOItem collectItem = collect.GetCollectItem();
+        Vector2 position = collect.GetPosition();
+        
+        Vec3D pos = new Vec3D(position.GetFloatX(), position.GetFloatY(), 0);
+        GlobalGameData.mmoApi.setMMOItemPosition(collectItem, pos, GlobalGameData.room);
     }
     
     public static void SetTowerState(TowerClass tower, boolean isUpdateOnClients, boolean isFirstCall)
@@ -181,6 +191,23 @@ public class NetworkDataProcess
         params.putDouble("targetY", bullet.GetState().GetTargetLocation().GetPosition().GetY());
         
         GlobalGameData.server.send("RPCStartBullet", params, users);
+    }
+    
+    public static void SendClientCollectable(CollectableClass collect, boolean isEmit)
+    {//isEmit = true, then it should be created, isEmit = false, then it should be destroyed
+        Vector2 position = collect.GetPosition();
+        Vec3D pos = new Vec3D(position.GetFloatX(), position.GetFloatY(), 0);
+        List<User> users = GlobalGameData.room.getProximityList(pos);
+        
+        ISFSObject params = new SFSObject();
+        params.putInt("id", collect.GetId());
+        params.putInt("type", collect.GetType());
+        params.putDouble("x", position.GetX());
+        params.putDouble("y", position.GetY());
+        params.putFloat("radius", collect.GetRadius());
+        params.putBool("emit", isEmit);
+        
+        GlobalGameData.server.send("RPCProcessCollect", params, users);
     }
     
     public static void KillsMessage()

@@ -19,6 +19,7 @@ public class GlobalGameData
     public static ConfigDataClass serverConfig;
     public static CollisionDataClass collisionMap;
     public static StartPointsClass startPoints;
+    public static CollectableProcessorClass collectableProcessor;
     
     public static Map<Integer, PlayerClass> clients;
     public static Map<Integer, MonsterClass> monsters;

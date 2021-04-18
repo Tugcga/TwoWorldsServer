@@ -138,6 +138,13 @@ public class Vector2
         return Math.sqrt(v1*v1 + v2*v2);
     }
     
+    public static double GetDistanceSq(Vector2 a, Vector2 b)
+    {
+        double v1 = a.GetX() - b.GetX();
+        double v2 = a.GetY() - b.GetY();
+        return v1*v1 + v2*v2;
+    }
+    
     public static Vector2 FromPolarToVector(float angle, double radius)
     {
         return new Vector2(Math.cos(angle) * radius, Math.sin(angle) * radius);

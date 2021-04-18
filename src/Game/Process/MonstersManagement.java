@@ -177,7 +177,6 @@ public class MonstersManagement
             vars.add(new MMOItemVariable(NetworkKeys.key_serverItem_kind, NetworkKeys.monsterKind));
             vars.add(new MMOItemVariable(NetworkKeys.key_serverItem_type, monster.GetMonsterType()));
             vars.add(new MMOItemVariable(NetworkKeys.key_person_radius, monster.GetRadius()));
-            vars.add(new MMOItemVariable(NetworkKeys.key_person_maxLife, monster.GetMaxLife()));
             vars.add(new MMOItemVariable(NetworkKeys.key_monster_damage, monster.GetAtacker().GetDamage()));
             vars.add(new MMOItemVariable(NetworkKeys.key_monster_damageRadius, monster.GetAtacker().GetDamageRadius()));
         }
@@ -189,6 +188,7 @@ public class MonstersManagement
         vars.add(new MMOItemVariable(NetworkKeys.key_targetEnemy_type, monster.GetState().GetTargetEnemyType()));
         vars.add(new MMOItemVariable(NetworkKeys.key_targetEnemy_id, monster.GetState().GetTargetEnemyId()));
         vars.add(new MMOItemVariable(NetworkKeys.key_person_life, monster.GetLife()));
+        vars.add(new MMOItemVariable(NetworkKeys.key_person_maxLife, monster.GetMaxLife()));
         
         return vars;
     }

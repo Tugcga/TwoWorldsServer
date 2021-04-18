@@ -1,6 +1,7 @@
 
 package Game.Process;
 
+import Game.DataClasses.CollectableProcessorClass;
 import Game.DataClasses.EdgeClass;
 import Game.DataClasses.GlobalGameData;
 import Game.DataClasses.IntersectionResultClass;
@@ -69,16 +70,15 @@ public class ClientsManagement
             vars.add(new SFSUserVariable(NetworkKeys.key_client_modelIndex, player.GetModelIndex()));
             vars.add(new SFSUserVariable(NetworkKeys.key_client_fireCoolDawn, player.GetFireController().GetCoolDawn()));
             vars.add(new SFSUserVariable(NetworkKeys.key_person_radius, player.GetRadius()));
-            vars.add(new SFSUserVariable(NetworkKeys.key_person_maxLife, player.GetMaxLife()));
         }
         vars.add(new SFSUserVariable(NetworkKeys.key_speed, player.GetMovement().GetSpeed()));
         vars.add(new SFSUserVariable(NetworkKeys.key_location_position_x, player.GetPosition().GetX()));
         vars.add(new SFSUserVariable(NetworkKeys.key_location_position_y, player.GetPosition().GetY()));
         vars.add(new SFSUserVariable(NetworkKeys.key_client_isMove, player.GetMovement().IsMove()));
-        //vars.add(new SFSUserVariable(NetworkKeys.key_client_directionIndex, player.GetMovement().DirectionIndex()));
         vars.add(new SFSUserVariable(NetworkKeys.key_client_moveAngle, player.GetMovement().GetMoveAngle()));
         vars.add(new SFSUserVariable(NetworkKeys.key_client_angle, player.GetAngle()));
         vars.add(new SFSUserVariable(NetworkKeys.key_person_life, player.GetLife()));
+        vars.add(new SFSUserVariable(NetworkKeys.key_person_maxLife, player.GetMaxLife()));
         
         return vars;
     }
