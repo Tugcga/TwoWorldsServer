@@ -268,7 +268,7 @@ r | Float | Радиус объекта
 В этом разделе на конкретных примерах (написанных на языке C# для Unity) опишем, как отправлять данные на сервер и как их оттуда получать. IP-адрес сервера может меняться время от времени. Актуальный ip-адрес приходит в ответ на GET-запрос
 
 ```php
-https://arenagameplay.000webhostapp.com/ipAdress/ipDataCommunication.php?task=0&password=please
+http://areazone.azurewebsites.net/communicator/communicator.php?task=getserverip&password=please
 ```
 
 Порты, которые используются сервером для соединений с клиентами:
